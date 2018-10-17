@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+	<ui:composition template="/templates/mainLayout.xhtml">
+		<ui:define name="windowTitle">
+			<h:outputText value="#{msgs.edit}" />
+		</ui:define>
+		
+		<ui:define name="content">
+			<h:dataTable var="data" value="#{employeeDetails.employees}">
+				<h:column>
+					<h:outputText value="#{data.name}" />
+				</h:column>
+				<h:column>
+					<h:outputText value="#{data.empNumber}" />
+				</h:column>
+				<h:column>
+					<h:outputText value="#{data.userName}" />
+				</h:column>
+			</h:dataTable>
+		</ui:define>
+		
+		
+		
+	</ui:composition>
+</html>

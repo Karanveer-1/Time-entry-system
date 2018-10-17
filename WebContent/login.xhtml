@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition template="/templates/mainLayout.xhtml">
+		<ui:define name="windowTitle">
+			<h:outputText value="#{msgs.login}" />
+		</ui:define>
+		
+		<ui:define name="navBar">
+			<ui:include src="/sections/login/navigationBar.xhtml" />
+		</ui:define>
+		
+		<ui:define name="content">
+			<h:form>
+			    <h:panelGrid id="grid" columns="2" cellpadding="10">
+			        <p:outputLabel value="#{msgs.userName}: "  for="loginUserName"/>
+			        <p:inputText id="loginUserName" value="#{login.credentials.userName}" required="true" />
+			        <p:outputLabel value="#{msgs.password}: " for="loginPassword"/>
+			        <p:password id="loginPassword" value="#{login.credentials.password}" validator="#{login.validateUsernamePassword}" required="true"/>
+			    </h:panelGrid>
+			    <p:spacer height="10" />
+			    <p:commandButton value="Login" action="#{login.loginUser}" update="grid"/>
+			    <p:messages id="messages" showSummary="false" showDetail="true" autoUpdate="true" closable="true"/>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</html>

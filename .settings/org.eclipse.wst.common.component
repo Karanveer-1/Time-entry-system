@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="Assignment01">
+        <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/JavaSource"/>
+        <dependent-module archiveName="ass1_timesheet.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/ass1_timesheet/ass1_timesheet">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <property name="context-root" value="Assignment01"/>
+        <property name="java-output-path" value="/Assignment01/WebContent/WEB-INF/classes"/>
+    </wb-module>
+</project-modules>

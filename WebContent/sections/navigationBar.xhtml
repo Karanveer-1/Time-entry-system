@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+	<ui:composition>
+		<h:form>  
+		    <p:growl id="messages"/>
+		    <p:menubar>
+		        <p:submenu label="Timesheet" icon="ui-icon-document">
+					<p:menuitem value="Current Week" action="index?faces-redirect=true" />
+		            <p:menuitem value="Previous Week" url="#" />
+		        </p:submenu>
+		 
+		        <p:submenu label="#{msgs.user}"  icon="ui-icon-person">
+		            <p:menuitem value="#{msgs.create}" action="#{user.create}"  icon="ui-icon-contact"/>
+		            <p:menuitem value="#{msgs.edit}" action="#{user.edit}"  icon="ui-icon-pencil"/>
+		        </p:submenu>
+		 
+		        <p:submenu label="#{msgs.settings}" icon="ui-icon-gear">
+		        	<p:menuitem value="#{msgs.changePassword}" action="changePassword?faces-redirect=true" icon="ui-icon-pencil" />
+		        </p:submenu>
+		 
+		        <f:facet name="options">
+		            <p:commandButton action="#{login.logoutUser}" value="#{msgs.logout}" icon="ui-icon-extlink" />
+		        </f:facet>
+		    </p:menubar>
+		</h:form>
+	</ui:composition>
+</html>
