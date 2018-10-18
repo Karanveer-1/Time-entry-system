@@ -18,19 +18,14 @@ import java.util.Map;
 @SessionScoped
 public class Login implements Serializable {
     private static final long serialVersionUID = 1L;
-    private @Inject Credentials credentials;
-    private @Inject EmployeeDetails emp;
-    
-    public String changePassword() {
-        Map<String, String> loginCredentials = emp.getLoginCombos();
-        loginCredentials.replace(credentials.getUserName(), credentials.getPassword());
-        return "index?faces-redirect=true";
-    }
+    private Credentials credentials = new Credentials();
+    private boolean loggedIn = false;
+    @Inject private EmployeeDetails emp;
     
     public void validateUsernamePassword(FacesContext context, UIComponent component, Object value) {
             UIInput userNameInput = (UIInput) component.findComponent("loginUserName");
-            String un = ((String) userNameInput.getLocalValue());
-            String pw = ((String) value.toString());
+            String un = userNameInput.getLocalValue().toString();
+            String pw = value.toString();
             Credentials temp = new Credentials();
             temp.setUserName(un);
             temp.setPassword(pw);
@@ -43,13 +38,24 @@ public class Login implements Serializable {
             }
     }
 
+    public String changePassword() {
+        Map<String, String> loginCredentials = emp.getLoginCombos();
+        loginCredentials.replace(credentials.getUserName(), credentials.getPassword());
+        return "index?faces-redirect=true";
+    }
 
     public String loginUser() {
+        loggedIn = true;
         return "index?faces-redirect=true";
     }
     
     public String logoutUser() {
+        loggedIn = false;
         return "login?faces-redirect=true";
+    }
+    
+    public boolean isLoggedIn() {
+        return loggedIn;
     }
     
     public Credentials getCredentials() {
@@ -58,6 +64,5 @@ public class Login implements Serializable {
 
     public void setCredentials(Credentials credentials) {
         this.credentials = credentials;
-    }
-    
+    }    
 }
