@@ -10,17 +10,20 @@
 		</ui:define>
 		
 		<ui:define name="content">
-			<h:dataTable var="data" value="#{employeeDetails.employees}">
-				<h:column>
-					<h:outputText value="#{data.name}" />
-				</h:column>
-				<h:column>
-					<h:outputText value="#{data.empNumber}" />
-				</h:column>
-				<h:column>
-					<h:outputText value="#{data.userName}" />
-				</h:column>
-			</h:dataTable>
+			<h:outputText value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
+			<h:form rendered="#{login.loggedIn}">
+				<h:dataTable var="data" value="#{employeeDetails.employees}">
+					<h:column>
+						<h:outputText value="#{data.name}" />
+					</h:column>
+					<h:column>
+						<h:outputText value="#{data.empNumber}" />
+					</h:column>
+					<h:column>
+						<h:outputText value="#{data.userName}" />
+					</h:column>
+				</h:dataTable>
+			</h:form>
 		</ui:define>
 		
 		

@@ -3,8 +3,6 @@ package com.corejsf;
 import java.util.List;
 import java.util.Map;
 
-import javax.enterprise.context.Conversation;
-import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -20,6 +18,7 @@ import ca.bcit.infosys.employee.EmployeeList;
 @RequestScoped
 public class EmployeeDetails implements EmployeeList {
     @Inject EmployeeData employeeData;
+    @Inject Login currentUser;
 
     @Override
     public List<Employee> getEmployees() {
@@ -36,6 +35,16 @@ public class EmployeeDetails implements EmployeeList {
         System.out.println("User not found!");
         return null;
     }
+    
+    public Employee getEmployeeWithUserName(String userName) {
+        for (Employee emp: employeeData.getEmployeeList()) {
+            if (emp.getUserName().equalsIgnoreCase(userName)) {
+                return emp;
+            }
+        }
+        System.out.println("User not found!");
+        return null;
+    }
 
     @Override
     public Map<String, String> getLoginCombos() {
@@ -44,14 +53,13 @@ public class EmployeeDetails implements EmployeeList {
 
     @Override
     public Employee getCurrentEmployee() {
-        // TODO Auto-generated method stub
-        return null;
+        return getEmployeeWithUserName(currentUser.getCredentials().getUserName());
     }
 
     @Override
     public Employee getAdministrator() {
-        // TODO Auto-generated method stub
-        return null;
+        Employee admin = employeeData.getEmployeeList().get(0);
+        return admin;
     }
 
     @Override
@@ -67,11 +75,6 @@ public class EmployeeDetails implements EmployeeList {
     }
 
     @Override
-    public String logout(Employee employee) {
-        return null;
-    }
-
-    @Override
     public void deleteEmployee(Employee userToDelete) {
         employeeData.getEmployeeList().remove(userToDelete);
     }
@@ -80,5 +83,9 @@ public class EmployeeDetails implements EmployeeList {
     public void addEmployee(Employee newEmployee) {
         employeeData.getEmployeeList().add(newEmployee);
     }
-
+    
+    @Override
+    public String logout(Employee employee) {
+        return null;
+    }
 }

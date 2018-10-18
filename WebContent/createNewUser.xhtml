@@ -11,7 +11,8 @@
 		</ui:define>
 		
 		<ui:define name="content">
-			<h:form>
+			<h:outputText value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
+			<h:form rendered="#{login.loggedIn}">
 			    <h:panelGrid columns="2" id="grid" cellpadding="10">
 			    	<p:outputLabel value="#{msgs.empName}: "  for="empName"/>
 			        <p:inputText id="empName" value="#{user.name}" required="true" />

@@ -7,7 +7,6 @@
 
 	<ui:composition>
 		<h:form>  
-		    <p:growl id="messages"/>
 		    <p:menubar>
 		        <p:submenu label="Timesheet" icon="ui-icon-document">
 					<p:menuitem value="Current Week" action="index?faces-redirect=true" />
@@ -24,7 +23,8 @@
 		        </p:submenu>
 		 
 		        <f:facet name="options">
-		            <p:commandButton action="#{login.logoutUser}" value="#{msgs.logout}" icon="ui-icon-extlink" />
+		         	<p:commandButton action="#{login.logoutUser}" value="#{msgs.login}" icon="ui-icon-extlink" rendered="#{not login.loggedIn}" />
+		            <p:commandButton action="#{login.logoutUser}" value="#{msgs.logout}" icon="ui-icon-extlink" rendered="#{login.loggedIn}"/>
 		        </f:facet>
 		    </p:menubar>
 		</h:form>

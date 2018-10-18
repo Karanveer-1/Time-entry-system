@@ -12,23 +12,19 @@ import ca.bcit.infosys.employee.Employee;
 @ApplicationScoped
 public class EmployeeData {
     ArrayList<Employee> employeeList = new ArrayList<Employee>(Arrays.asList(
+            new Employee("admin", 0, "admin"),
             new Employee("a", 1, "a"),
             new Employee("b", 2, "b"),
-            new Employee("c", 3, "c"),
-            new Employee("d", 4, "d"),
-            new Employee("e", 5, "e"),
-            new Employee("f", 6, "f")));
+            new Employee("c", 3, "c")));
     
     HashMap<String, String> credentialsMap = new HashMap<String, String>();
 
     @PostConstruct
     public void init() {
+        credentialsMap.put("admin", "admin");
         credentialsMap.put("a", "a");
         credentialsMap.put("b", "b");
         credentialsMap.put("c", "c");
-        credentialsMap.put("d", "d");
-        credentialsMap.put("e", "e");
-        credentialsMap.put("f", "f");
     }
     
     public HashMap<String, String> getCredentialsMap() {

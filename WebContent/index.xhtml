@@ -10,8 +10,58 @@
      </h:head>
      <h:body>
 		<ui:composition template="/templates/mainLayout.xhtml">
+			<ui:define name="windowTitla">
+				#{msgs.timesheet}
+			</ui:define>
+			
 			<ui:define name="content">
-				yup!!!s
+				<h:outputText value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
+				
+				<h:form rendered="#{login.loggedIn}">
+				
+					<h:outputText value="Employee Number: #{employeeDetails.currentEmployee.empNumber}" /> <br/>
+					<h:outputText value="Name: #{employeeDetails.currentEmployee.name}" />
+					
+					<!-- <h:dataTable var="data" value="#{}">
+					
+						<h:column>
+							<f:facet name="header">#{msgs.project}</f:facet>
+							<h:outputText value="" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.workpackage}</f:facet>
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.sat}</f:facet>
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.sun}</f:facet>
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.mon}</f:facet>
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.tue}</f:facet>
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.wed}</f:facet>
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.thu}</f:facet>
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.fri}</f:facet>
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.sat}</f:facet>
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.notes}</f:facet>
+						</h:column>
+						
+					</h:dataTable> -->
+					
+				</h:form>
 			</ui:define>
 		</ui:composition>
      </h:body>
