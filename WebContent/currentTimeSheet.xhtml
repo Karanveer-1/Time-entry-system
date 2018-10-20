@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+     <h:head>
+		<title>Window title</title>
+     </h:head>
+     <h:body>
+		<ui:composition template="/templates/mainLayout.xhtml">
+			<ui:define name="windowTitle">
+				#{msgs.timesheet}
+			</ui:define>
+			
+			<ui:define name="content">
+				<h:form>
+				
+				<h:commandButton action="#{timesheetDetails.addTimesheet}" value="Create" 
+									rendered="#{not timesheetDetails.hasCurrentTimesheet(employeeDetails.currentEmployee)}"/>
+									
+					<h:dataTable var="data" value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).details}" 
+								rendered="#{timesheetDetails.hasCurrentTimesheet(employeeDetails.currentEmployee)}" 
+								border="1">
+					 
+						<h:column >
+							<f:facet name="header">#{msgs.project}</f:facet>
+							<h:outputText value="#{data.projectID}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.workpackage}</f:facet>
+							<h:outputText value="#{data.workPackage}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.sat}</f:facet>
+							<h:outputText value="#{data.hoursForWeek[0]}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.sun}</f:facet>
+							<h:outputText value="#{data.hoursForWeek[1]}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.mon}</f:facet>
+							<h:outputText value="#{data.hoursForWeek[2]}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.tue}</f:facet>
+							<h:outputText value="#{data.hoursForWeek[3]}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.wed}</f:facet>
+							<h:outputText value="#{data.hoursForWeek[4]}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.thu}</f:facet>
+							<h:outputText value="#{data.hoursForWeek[5]}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.fri}</f:facet>
+							<h:outputText value="#{data.hoursForWeek[6]}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.notes}</f:facet>
+							<h:outputText value="#{data.notes}" />
+						</h:column>
+						
+					</h:dataTable>
+					<h:commandButton action="editTimesheet?faces-redirect=true" value="Edit"
+							rendered="#{timesheetDetails.hasCurrentTimesheet(employeeDetails.currentEmployee)}"/>
+				</h:form>
+			</ui:define>
+			
+		</ui:composition>
+     </h:body>
+</html>

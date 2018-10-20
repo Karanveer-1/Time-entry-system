@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+	<ui:composition template="/templates/mainLayout.xhtml">
+		<ui:define name="content">
+				<h:form>
+					<h:dataTable var="data" value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).details}"
+							border="1">
+						<h:column >
+							<f:facet name="header">#{msgs.project}</f:facet>
+							<h:inputText value="#{data.projectID}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.workpackage}</f:facet>
+							<h:inputText value="#{data.workPackage}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.sat}</f:facet>
+							<h:inputText value="#{data.hoursForWeek[0]}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.sun}</f:facet>
+							<h:inputText value="#{data.hoursForWeek[1]}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.mon}</f:facet>
+							<h:inputText value="#{data.hoursForWeek[2]}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.tue}</f:facet>
+							<h:inputText value="#{data.hoursForWeek[3]}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.wed}</f:facet>
+							<h:inputText value="#{data.hoursForWeek[4]}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.thu}</f:facet>
+							<h:inputText value="#{data.hoursForWeek[5]}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.fri}</f:facet>
+							<h:inputText value="#{data.hoursForWeek[6]}" />
+						</h:column>
+						<h:column>
+							<f:facet name="header">#{msgs.notes}</f:facet>
+							<h:inputText value="#{data.notes}" />
+						</h:column>
+					</h:dataTable>
+					<h:commandButton action="currentTimeSheet?faces-redirect=true" value="Save" />
+				</h:form>
+			</ui:define>
+	</ui:composition>
+</html>
