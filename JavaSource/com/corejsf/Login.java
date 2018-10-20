@@ -23,19 +23,19 @@ public class Login implements Serializable {
     @Inject private EmployeeDetails emp;
     
     public void validateUsernamePassword(FacesContext context, UIComponent component, Object value) {
-            UIInput userNameInput = (UIInput) component.findComponent("loginUserName");
-            String un = userNameInput.getLocalValue().toString();
-            String pw = value.toString();
-            Credentials temp = new Credentials();
-            temp.setUserName(un);
-            temp.setPassword(pw);
-            
-            boolean valid = emp.verifyUser(temp);
+        UIInput userNameInput = (UIInput) component.findComponent("loginUserName");
+        String un = userNameInput.getLocalValue().toString();
+        String pw = value.toString();
+        Credentials temp = new Credentials();
+        temp.setUserName(un);
+        temp.setPassword(pw);
+        
+        boolean valid = emp.verifyUser(temp);
 
-            if (!valid) {
-                throw new ValidatorException(
-                        new FacesMessage( FacesMessage.SEVERITY_ERROR, "Incorrect Username or Password", "Incorrect Username or Password" ) );
-            }
+        if (!valid) {
+            throw new ValidatorException(
+                    new FacesMessage( FacesMessage.SEVERITY_ERROR, "Incorrect Username or Password", "Incorrect Username or Password" ) );
+        }
     }
 
     public String changePassword() {
@@ -46,7 +46,7 @@ public class Login implements Serializable {
 
     public String loginUser() {
         loggedIn = true;
-        return "index?faces-redirect=true";
+        return "currentTimeSheet?faces-redirect=true";
     }
     
     public String logoutUser() {

@@ -11,21 +11,33 @@
 		</ui:define>
 		
 		<ui:define name="content">
+		
 			<h:outputText value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
+			
 			<h:form rendered="#{login.loggedIn}">
+			
 			    <h:panelGrid columns="2" id="grid" cellpadding="10">
+			    
 			    	<p:outputLabel value="#{msgs.empName}: "  for="empName"/>
 			        <p:inputText id="empName" value="#{user.name}" required="true" />
+			        
 			        <p:outputLabel value="#{msgs.empNo}: "  for="empNo"/>
 			        <p:inputText id="empNo" value="#{user.empNumber}" required="true" />
+			        
 			        <p:outputLabel value="#{msgs.userName}: "  for="empUserName"/>
 			        <p:inputText id="empUserName" value="#{user.userName}" required="true" />
+			        
 			        <p:outputLabel value="#{msgs.password}: " for="empPassword"/>
-			        <p:password id="empPassword" value="#{user.cred.password}" required="true"/>
+			        <p:password id="empPassword" value="#{user.password}" required="true"/>
+			        
 			    </h:panelGrid>
+			    
 			    <p:spacer height="10" />
+			    
 			    <p:commandButton value="#{msgs.create}" action="#{user.add}" update="grid"/>
+			    
 			    <p:messages id="messages" showSummary="false" showDetail="true" autoUpdate="true" closable="true"/>
+			    
 			</h:form>
 		</ui:define>
 	</ui:composition>

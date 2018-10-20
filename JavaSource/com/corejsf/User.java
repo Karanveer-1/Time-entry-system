@@ -14,16 +14,10 @@ import ca.bcit.infosys.employee.Employee;
 @Named
 @RequestScoped
 public class User extends Employee {
-    private Credentials cred = new Credentials();
+    private String password;
     private @Inject EmployeeDetails emp;
-//    private @Inject Conversation convo;
-//    private boolean isConvoStart = false;
     
     public String create() {
-//        if (!isConvoStart) {
-//            convo.begin();
-//            isConvoStart = true;
-//        }
         return "createNewUser?faces-redirect=true";
     }
     
@@ -32,22 +26,18 @@ public class User extends Employee {
     }
     
     public String add() {
-        emp.addEmployee(this);
         Map<String, String> credentialsMap = emp.getLoginCombos();
-        credentialsMap.put(this.getUserName(), cred.getPassword());
-//        if (isConvoStart) {
-//            convo.end();
-//            isConvoStart = false;
-//        }
+        credentialsMap.put(this.getUserName(), password);
+        emp.addEmployee(this);
         return "index?faces-redirect=true";
     }
     
-    public Credentials getCred() {
-        return cred;
+    public String getPassword() {
+        return password;
     }
 
-    public void setCred(Credentials cred) {
-        this.cred = cred;
+    public void setPassword(String password) {
+        this.password = password;
     }
     
 }

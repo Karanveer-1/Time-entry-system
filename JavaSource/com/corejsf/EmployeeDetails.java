@@ -27,7 +27,7 @@ public class EmployeeDetails implements EmployeeList {
 
     @Override
     public Employee getEmployee(String name) {
-        for (Employee emp: employeeData.getEmployeeList()) {
+        for (Employee emp: getEmployees()) {
             if (emp.getName().equalsIgnoreCase(name)) {
                 return emp;
             }
@@ -37,7 +37,7 @@ public class EmployeeDetails implements EmployeeList {
     }
     
     public Employee getEmployeeWithUserName(String userName) {
-        for (Employee emp: employeeData.getEmployeeList()) {
+        for (Employee emp: getEmployees()) {
             if (emp.getUserName().equalsIgnoreCase(userName)) {
                 return emp;
             }
@@ -57,12 +57,6 @@ public class EmployeeDetails implements EmployeeList {
     }
 
     @Override
-    public Employee getAdministrator() {
-        Employee admin = employeeData.getEmployeeList().get(0);
-        return admin;
-    }
-
-    @Override
     public boolean verifyUser(Credentials credential) {
         Map<String, String> loginCredentials = getLoginCombos();
         if (loginCredentials.containsKey(credential.getUserName())) {
@@ -72,6 +66,11 @@ public class EmployeeDetails implements EmployeeList {
         }
         System.out.println("Wrong credentials");
         return false;
+    }
+    
+    @Override
+    public Employee getAdministrator() {
+        return null;
     }
 
     @Override
