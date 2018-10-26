@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 
-import com.corejsf.timesheet.data.EmployeeData;
+import com.corejsf.timesheet.data.Data;
 
 import ca.bcit.infosys.employee.Credentials;
 import ca.bcit.infosys.employee.Employee;
@@ -17,7 +17,7 @@ import ca.bcit.infosys.employee.EmployeeList;
 @Named
 @RequestScoped
 public class EmployeeDetails implements EmployeeList {
-    @Inject EmployeeData employeeData;
+    @Inject Data employeeData;
     @Inject Login currentUser;
 
     @Override
@@ -67,6 +67,14 @@ public class EmployeeDetails implements EmployeeList {
         System.out.println("Wrong credentials");
         return false;
     }
+    
+    
+    public String changePassword() {
+        Map<String, String> loginCredentials = getLoginCombos();
+        loginCredentials.replace(currentUser.getCredentials().getUserName(), currentUser.getCredentials().getPassword());
+        return "currentTimeSheet?faces-redirect=true";
+    }
+    
     
     @Override
     public Employee getAdministrator() {
