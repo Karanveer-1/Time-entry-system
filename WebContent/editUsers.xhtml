@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html">
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
 
 	<ui:composition template="/templates/mainLayout.xhtml">
 		<ui:define name="windowTitle">
@@ -12,17 +13,37 @@
 		<ui:define name="content">
 			<h:outputText value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
 			<h:form rendered="#{login.loggedIn}">
-				<h:dataTable var="data" value="#{employeeDetails.employees}">
-					<h:column>
-						<h:outputText value="#{data.name}" />
-					</h:column>
-					<h:column>
-						<h:outputText value="#{data.empNumber}" />
-					</h:column>
-					<h:column>
-						<h:outputText value="#{data.userName}" />
-					</h:column>
-				</h:dataTable>
+				<p:dataTable var="employee" value="#{employeeDetails.employees}">
+					<p:column>
+						<f:facet name="header">#{msgs.edit}</f:facet>
+						<p:selectBooleanCheckbox value="#{employee.editable}"  onchange="submit()"/>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Name</f:facet>
+						<p:inputText value="#{employee.name}" rendered="#{employee.editable}" />
+               			<h:outputText value="#{employee.name}" rendered="#{not employee.editable}"/>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Employee Number</f:facet>
+						<p:inputText value="#{employee.empNumber}" rendered="#{employee.editable}" />
+               			<h:outputText value="#{employee.empNumber}" rendered="#{not employee.editable}"/>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Username</f:facet>
+               			<h:outputText value="#{employee.userName}"/>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Reset Password</f:facet>
+						<h:commandLink value="Reset" action="#{employeeDetails.resetPassword(employee)}"/>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Delete</f:facet>
+						<h:commandLink value="Delete" action="#{employeeDetails.deleteEmployee(employee)}"/>
+					</p:column>
+				</p:dataTable>
+				<p:spacer height="10" />
+				<h:commandButton value="#{msgs.save}" action="#{employeeDetails.save}"/>
+				<p:messages id="messages" showSummary="false" showDetail="true" autoUpdate="true" closable="true"/>
 			</h:form>
 		</ui:define>
 		
