@@ -12,7 +12,8 @@
 		
 		<ui:define name="content">
 			<h:outputText value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
-			<h:form rendered="#{login.loggedIn}">
+			<h:outputText value="Sorry, you dont have permissions for this" rendered="#{not employeeDetails.admin}"/>
+			<h:form rendered="#{employeeDetails.admin}">
 				<p:dataTable var="employee" value="#{employeeDetails.employees}">
 					<p:column>
 						<f:facet name="header">#{msgs.edit}</f:facet>

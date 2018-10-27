@@ -10,13 +10,15 @@ import ca.bcit.infosys.employee.Employee;
 
 @Named
 @ApplicationScoped
-public class EmployeeData {
+public class Data {
+    private final String adminUserName = "admin"; 
     ArrayList<Employee> employeeList = new ArrayList<Employee>(Arrays.asList(
-            new Employee("admin", 0, "admin"),
-            new Employee("a", 1, "a"),
-            new Employee("b", 2, "b"),
-            new Employee("c", 3, "c")));
-    
+            new Employee("admin", 1, "admin"),
+            new Employee("a", 2, "a"),
+            new Employee("b", 3, "b"),
+            new Employee("c", 4, "c")));
+
+
     HashMap<String, String> credentialsMap = new HashMap<String, String>();
 
     @PostConstruct
@@ -44,5 +46,9 @@ public class EmployeeData {
 
     public void setEmployeeList(ArrayList<Employee> employeeList) {
         this.employeeList = employeeList;
+    }
+
+    public String getAdminUserName() {
+        return adminUserName;
     }
 }

@@ -1,9 +1,11 @@
-package com.corejsf;
+package com.corejsf.timesheet;
 
 import java.util.List;
 import java.util.Map;
 
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Conversation;
+import javax.enterprise.context.ConversationScoped;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -15,10 +17,14 @@ import ca.bcit.infosys.employee.Employee;
 import ca.bcit.infosys.employee.EmployeeList;
 
 @Named
-@RequestScoped
+@ConversationScoped
 public class EmployeeDetails implements EmployeeList {
+    private Employee tempEmployee;
+    private String tempPassword;
+
     @Inject Data employeeData;
     @Inject Login currentUser;
+    @Inject Conversation convo;
 
     @Override
     public List<Employee> getEmployees() {
@@ -38,7 +44,7 @@ public class EmployeeDetails implements EmployeeList {
     
     public Employee getEmployeeWithUserName(String userName) {
         for (Employee emp: getEmployees()) {
-            if (emp.getUserName().equalsIgnoreCase(userName)) {
+            if (emp.getUserName().equals(userName)) {
                 return emp;
             }
         }
@@ -76,13 +82,23 @@ public class EmployeeDetails implements EmployeeList {
     }
     
     
+    public boolean isAdmin() {
+        if (currentUser.getCredentials().getUserName().equals(getAdministrator().getUserName())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     @Override
     public Employee getAdministrator() {
-        return null;
+        return getEmployeeWithUserName(employeeData.getAdminUserName());
     }
 
     @Override
     public void deleteEmployee(Employee userToDelete) {
+        Map<String, String> loginCredentials = getLoginCombos();
+        loginCredentials.remove(userToDelete.getUserName());
         employeeData.getEmployeeList().remove(userToDelete);
     }
 
@@ -94,5 +110,43 @@ public class EmployeeDetails implements EmployeeList {
     @Override
     public String logout(Employee employee) {
         return null;
+    }
+    
+    public String save() {
+        for (Employee e : getEmployees()) {
+            if (e.isEditable()) {
+                e.setEditable(false);
+            }
+        }
+        return null;
+    }
+    
+    public String resetPassword(Employee e) {
+        convo.begin();
+        setTempEmployee(e);
+        return "resetPassword?faces-redirect=true";
+    }
+    
+    public String savePassword() {
+        Map<String, String> loginCredentials = getLoginCombos();
+        loginCredentials.replace(getTempEmployee().getUserName(), tempPassword);
+        convo.end();
+        return "editUsers?faces-redirect=true";
+    }
+    
+    public String getTempPassword() {
+        return tempPassword;
+    }
+
+    public void setTempPassword(String tempPassword) {
+        this.tempPassword = tempPassword;
+    }
+
+    public Employee getTempEmployee() {
+        return tempEmployee;
+    }
+
+    public void setTempEmployee(Employee temp) {
+        this.tempEmployee = temp;
     }
 }

@@ -6,11 +6,11 @@
       xmlns:p="http://primefaces.org/ui">
 
 	<ui:composition>
-		<h:form>  
+		<h:form>
 		    <p:menubar>
 		        <p:submenu label="Timesheet" icon="ui-icon-document">
-					<p:menuitem value="Current Week" action="index?faces-redirect=true" />
-		            <p:menuitem value="Previous Week" url="#" />
+					<p:menuitem value="#{msgs.currentweek}" action="currentTimeSheet?faces-redirect=true" />
+		            <p:menuitem value="Previous Week" action="allTimesheets?faces-redirect=true" />
 		        </p:submenu>
 		 
 		        <p:submenu label="#{msgs.user}"  icon="ui-icon-person">
