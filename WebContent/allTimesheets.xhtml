@@ -19,18 +19,24 @@
 				
 				<h:form rendered="#{login.loggedIn}">
 				
-					<h:panelGrid id="grid" columns="4" cellpadding="10">
+				<h:panelGrid columns="4" cellpadding="10">
 				        <p:outputLabel value="#{msgs.empNo}: "/>
 				        <p:outputLabel value="#{employeeDetails.currentEmployee.empNumber}"/>
-				        <p:outputLabel value="Week number: "/>
-				        <p:outputLabel value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).weekNumber}"/>
 				        <p:outputLabel value="#{msgs.empName}: "/>
 				        <p:outputLabel value="#{employeeDetails.currentEmployee.name}"/>
-				        <p:outputLabel value="Week ending: "/>
-				        <p:outputLabel value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).weekEnding}"/>
 			    	</h:panelGrid>
-			    	
-					<p:dataTable var="dt" value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).details}" >
+				
+				<p:dataTable var="list" value="#{timesheetDetails.getTimesheets(employeeDetails.currentEmployee)}" >
+					<p:column headerText="Week" width="200">
+						<h:panelGrid columns="1" cellpadding="10">
+					        <p:outputLabel value="Week number: "/>
+					        <p:outputLabel value="#{list.weekNumber}"/>
+					        <p:outputLabel value="Week ending: "/>
+					        <p:outputLabel value="#{list.weekEnding}"/>
+				    	</h:panelGrid>
+			    	</p:column>
+			    	<p:column headerText="Data">
+					<p:dataTable var="dt" value="#{list.details}" >
 						<p:column>
 							<f:facet name="header">#{msgs.project}</f:facet>
 							<h:outputText value="#{dt.projectID}" />
@@ -72,13 +78,9 @@
 							<h:outputText value="#{dt.notes}" />
 						</p:column>
 					</p:dataTable>
-					<p:spacer height="10" />
-					<p:commandButton action="#{timesheetDetails.addTimesheet}" value="#{msgs.create}" 
-									rendered="#{not timesheetDetails.hasCurrentTimesheet(employeeDetails.currentEmployee)}"/>
-					<p:commandButton action="editTimesheet?faces-redirect=true" value="Edit"
-									rendered="#{timesheetDetails.hasCurrentTimesheet(employeeDetails.currentEmployee)}"/>
-					<p:commandButton action="#{timesheetDetails.addRows}" value="Add rows"
-									rendered="#{timesheetDetails.hasCurrentTimesheet(employeeDetails.currentEmployee)}"/>
+					</p:column>
+				</p:dataTable>
+					
 				</h:form>
 			</ui:define>
 			

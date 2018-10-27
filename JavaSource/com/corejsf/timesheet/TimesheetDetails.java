@@ -1,4 +1,4 @@
-package com.corejsf;
+package com.corejsf.timesheet;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -40,14 +40,16 @@ public class TimesheetDetails implements TimesheetCollection {
     }
     
     public boolean hasCurrentTimesheet(Employee e) {
-//        Calendar c = new GregorianCalendar();
-//        int currentDay = c.get(Calendar.DAY_OF_WEEK);        what does it do?????
-//        int leftDays = Calendar.FRIDAY - currentDay;
-//        c.add(Calendar.DATE, leftDays);
-//        Date endWeek = c.getTime();
+        Calendar c = new GregorianCalendar();
+        int currentDay = c.get(Calendar.DAY_OF_WEEK);
+        int leftDays = Calendar.FRIDAY - currentDay;
+        c.add(Calendar.DATE, leftDays);
+        Date endWeek = c.getTime();
+        c.setTime(endWeek);
+        c.setFirstDayOfWeek(Calendar.SATURDAY);
         
-        for (Timesheet ts: timesheetData.getTimesheetList()) {
-            if (ts.getEmployee().getEmpNumber() == e.getEmpNumber()) {
+        for (Timesheet ts: getTimesheets(e)) {
+            if (ts.getWeekNumber() == c.get(Calendar.WEEK_OF_YEAR)) {
                 return true;
             }
         }
@@ -56,8 +58,15 @@ public class TimesheetDetails implements TimesheetCollection {
 
     @Override
     public Timesheet getCurrentTimesheet(Employee e) {
-        for (Timesheet ts: getTimesheets()) {
-            if (ts.getEmployee().getEmpNumber() == e.getEmpNumber()) {
+        Calendar c = new GregorianCalendar();
+        int currentDay = c.get(Calendar.DAY_OF_WEEK);
+        int leftDays = Calendar.FRIDAY - currentDay;
+        c.add(Calendar.DATE, leftDays);
+        Date endWeek = c.getTime();
+        c.setTime(endWeek);
+        c.setFirstDayOfWeek(Calendar.SATURDAY);
+        for (Timesheet ts: getTimesheets(e)) {
+            if (ts.getWeekNumber() == c.get(Calendar.WEEK_OF_YEAR)) {
                 return ts;
             }
         }
@@ -67,7 +76,6 @@ public class TimesheetDetails implements TimesheetCollection {
     @Override
     public String addTimesheet() {
         Timesheet temp = new Timesheet();
-        
         ArrayList<TimesheetRow> tempRows = (ArrayList<TimesheetRow>) temp.getDetails();
         
         for(int i = 0; i < 5;i++) {
@@ -82,7 +90,13 @@ public class TimesheetDetails implements TimesheetCollection {
         return "editTimesheet?faces-redirect=true";
     }
 
-    
+    public String addRows() {
+        Timesheet temp = getCurrentTimesheet(emp.getCurrentEmployee());
+        for(int i = 0; i < 5;i++) {
+            temp.getDetails().add(new TimesheetRow());
+        }
+        return "editTimesheet?faces-redirect=true";
+    }
     
     
     
@@ -99,10 +113,20 @@ public class TimesheetDetails implements TimesheetCollection {
 
 
 
+//if (ts.getEndWeek().compareTo(endWeek) < 0) {
+//System.out.println("lesser"); // this got clicked
+//} else if (ts.getEndWeek().compareTo(endWeek) > 0) {
+//System.out.println("greater");
+//} else {
+//System.out.println("equal");
+//}
+
+//System.out.println("1:" + ts.getWeekNumber());
+//System.out.println("2:" + c.get(Calendar.WEEK_OF_YEAR));
 
 
 
-
+// ts.getEndWeek().before(endWeek)
 
 
 

@@ -1,4 +1,4 @@
-package com.corejsf;
+package com.corejsf.timesheet;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;

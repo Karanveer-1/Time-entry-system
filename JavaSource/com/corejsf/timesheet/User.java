@@ -1,4 +1,4 @@
-package com.corejsf;
+package com.corejsf.timesheet;
 
 import java.util.Map;
 
