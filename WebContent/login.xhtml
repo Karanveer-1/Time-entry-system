@@ -7,7 +7,7 @@
 
 	<ui:composition template="/templates/mainLayout.xhtml">
 		<ui:define name="windowTitle">
-			<h:outputText value="#{msgs.login}"  />
+			<h:outputText value="#{msgs.login}" />
 		</ui:define>
 		
 		<ui:define name="navBar">
@@ -17,13 +17,13 @@
 		<ui:define name="content">
 			<h:form>
 			    <h:panelGrid id="grid" columns="2" cellpadding="10">
-			        <p:outputLabel value="#{msgs.userName}: "  for="loginUserName"/>
+			        <p:outputLabel value="#{msgs.userName}"  for="loginUserName"/>
 			        <p:inputText id="loginUserName" value="#{login.credentials.userName}" required="true" />
-			        <p:outputLabel value="#{msgs.password}: " for="loginPassword"/>
-			        <p:password id="loginPassword" value="#{login.credentials.password}" validator="#{login.validateUsernamePassword}" required="true"/>
+			        <p:outputLabel value="#{msgs.password}" for="loginPassword"/>
+			        <p:password id="loginPassword" value="#{login.credentials.password}" validator="#{employeeDetails.validateUsernamePassword}" required="true"/>
 			    </h:panelGrid>
 			    <p:spacer height="10" />
-			    <p:commandButton value="Login" action="#{login.loginUser}" update="grid"/>
+			    <p:commandButton value="#{msgs.login}" action="#{login.loginUser}" update="grid"/>
 			    <p:messages id="messages" showSummary="false" showDetail="true" autoUpdate="true" closable="true"/>
 			</h:form>
 		</ui:define>

@@ -11,23 +11,25 @@
 		</ui:define>
 		
 		<ui:define name="content">
-			<h:outputText value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
-			<h:outputText value="Sorry, you dont have permissions for this" rendered="#{not employeeDetails.admin}"/>
+			<h:outputText styleClass="error" value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
+			<h:panelGroup rendered="#{login.loggedIn}">
+			<h:outputText styleClass="error" value="#{msgs.permissionErrorMsg}" rendered="#{not employeeDetails.admin}"/>
 			<h:form rendered="#{employeeDetails.admin}">
 			    <h:panelGrid columns="2" id="grid" cellpadding="10">
-			    	<p:outputLabel value="#{msgs.empName}: "  for="empName"/>
+			    	<p:outputLabel value="#{msgs.empName}"  for="empName"/>
 			        <p:inputText id="empName" value="#{user.name}" required="true" />
-			        <p:outputLabel value="#{msgs.empNo}: "  for="empNo"/>
+			        <p:outputLabel value="#{msgs.empNo}"  for="empNo"/>
 			        <p:inputText id="empNo" value="#{user.empNumber}" required="true" />
-			        <p:outputLabel value="#{msgs.userName}: "  for="empUserName"/>
+			        <p:outputLabel value="#{msgs.username}"  for="empUserName"/>
 			        <p:inputText id="empUserName" value="#{user.userName}" required="true" validator="#{user.validate}" />
-			        <p:outputLabel value="#{msgs.password}: " for="empPassword"/>
+			        <p:outputLabel value="#{msgs.password}" for="empPassword"/>
 			        <p:password id="empPassword" value="#{user.password}" required="true"/>
 			    </h:panelGrid>
 			    <p:spacer height="10" />
 			    <p:commandButton value="#{msgs.create}" action="#{user.add}" update="grid"/>
 			    <p:messages id="messages" showSummary="false" showDetail="true" autoUpdate="true" closable="true"/>
 			</h:form>
+			</h:panelGroup>
 		</ui:define>
 	</ui:composition>
 </html>

@@ -11,8 +11,9 @@
 		</ui:define>
 		
 		<ui:define name="content">
-			<h:outputText value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
-			<h:outputText value="Sorry, you dont have permissions for this" rendered="#{not employeeDetails.admin}"/>
+			<h:outputText styleClass="error" value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
+			<h:panelGroup rendered="#{login.loggedIn}">
+			<h:outputText styleClass="error" value="#{msgs.permissionErrorMsg}" rendered="#{not employeeDetails.admin}"/>
 			<h:form rendered="#{employeeDetails.admin}">
 				<p:dataTable var="employee" value="#{employeeDetails.employees}">
 					<p:column>
@@ -20,35 +21,35 @@
 						<p:selectBooleanCheckbox value="#{employee.editable}"  onchange="submit()"/>
 					</p:column>
 					<p:column>
-						<f:facet name="header">Name</f:facet>
+						<f:facet name="header">#{msgs.name}</f:facet>
 						<p:inputText value="#{employee.name}" rendered="#{employee.editable}" />
                			<h:outputText value="#{employee.name}" rendered="#{not employee.editable}"/>
 					</p:column>
 					<p:column>
-						<f:facet name="header">Employee Number</f:facet>
+						<f:facet name="header">#{msgs.employeeNumber}</f:facet>
 						<p:inputText value="#{employee.empNumber}" rendered="#{employee.editable}" />
                			<h:outputText value="#{employee.empNumber}" rendered="#{not employee.editable}"/>
 					</p:column>
 					<p:column>
-						<f:facet name="header">Username</f:facet>
+						<f:facet name="header">#{msgs.username}</f:facet>
                			<h:outputText value="#{employee.userName}"/>
 					</p:column>
 					<p:column>
-						<f:facet name="header">Reset Password</f:facet>
-						<h:commandLink value="Reset" action="#{employeeDetails.resetPassword(employee)}"/>
+						<f:facet name="header">#{msgs.resetPassword}</f:facet>
+						<h:commandLink value="#{msgs.resetPassword}" action="#{employeeDetails.resetPassword(employee)}"/>
 					</p:column>
 					<p:column>
-						<f:facet name="header">Delete</f:facet>
-						<h:commandLink value="Delete" action="#{employeeDetails.deleteEmployee(employee)}"/>
+						<f:facet name="header">#{msgs.delete}</f:facet>
+						<h:commandLink value="#{msgs.delete}" rendered="#{not employeeDetails.administrator.userName.equals(employee.userName)}"
+															  action="#{employeeDetails.deleteEmployee(employee)}"/>
+						<h:outputText value="#{msgs.notDelete}" rendered="#{employeeDetails.administrator.userName.equals(employee.userName)}"/>
 					</p:column>
 				</p:dataTable>
 				<p:spacer height="10" />
 				<h:commandButton value="#{msgs.save}" action="#{employeeDetails.save}"/>
 				<p:messages id="messages" showSummary="false" showDetail="true" autoUpdate="true" closable="true"/>
 			</h:form>
+			</h:panelGroup>
 		</ui:define>
-		
-		
-		
 	</ui:composition>
 </html>

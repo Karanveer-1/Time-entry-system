@@ -1,89 +1,73 @@
 package com.corejsf.timesheet;
 
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UIInput;
-import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import ca.bcit.infosys.employee.Credentials;
 
 import java.io.Serializable;
 
+/**
+ * Manages current user credentials and logged in status.
+ * @author Karanveer
+ * @version 1.1
+ */
 @Named("login")
 @SessionScoped
 public class Login implements Serializable {
+    /** Serial version number. */
     private static final long serialVersionUID = 1L;
-    private Credentials credentials = new Credentials();
-    private boolean loggedIn = false;
+    
+    /** Credentials of logged in user. */
+    private Credentials credentials;
+    /** Determines if someone is logged in or not. */
+    private boolean loggedIn;
+    
+    /** Constructor for Login. */
+    public Login() {
+        credentials = new Credentials();
+        loggedIn = false;
+    }
 
+    /**
+     * Set the loggedIn to true and redirect the user to Current timesheet page.
+     * @return Navigation string
+     */
     public String loginUser() {
         loggedIn = true;
         return "currentTimeSheet?faces-redirect=true";
     }
     
+    /**
+     * Set the loggedIn to false and redirect the user to logout page.
+     * @return Navigation string
+     */
     public String logoutUser() {
         loggedIn = false;
         return "login?faces-redirect=true";
     }
 
+    /**
+     * Returns true if user is logged in else false.
+     * @return a boolean value
+     */
     public boolean isLoggedIn() {
         return loggedIn;
     }
     
+    /**
+     * Getter for logged in user's credentials.
+     * @return the credentials
+     */
     public Credentials getCredentials() {
         return credentials;
     }
-
+    
+    /**
+     * Sets the credentials of logged in user.
+     * @param credentials the credentials to set
+     */
     public void setCredentials(Credentials credentials) {
         this.credentials = credentials;
-    }    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    @Inject private EmployeeDetails emp;
-    
-    public void validateUsernamePassword(FacesContext context, UIComponent component, Object value) {
-        UIInput userNameInput = (UIInput) component.findComponent("loginUserName");
-        String un = userNameInput.getLocalValue().toString();
-        String pw = value.toString();
-        Credentials temp = new Credentials();
-        temp.setUserName(un);
-        temp.setPassword(pw);
-        
-        boolean valid = emp.verifyUser(temp);
-
-        if (!valid) {
-            throw new ValidatorException(
-                    new FacesMessage( FacesMessage.SEVERITY_ERROR, "Incorrect Username or Password", "Incorrect Username or Password" ) );
-        }
     }
 }

@@ -6,54 +6,73 @@
       xmlns:p="http://primefaces.org/ui">
 
 	<ui:composition template="/templates/mainLayout.xhtml">
+		<ui:define name="windowTitle">
+				#{msgs.edit}
+		</ui:define>
+		
 		<ui:define name="content">
-				<h:form>
-					<p:dataTable var="dt" value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).details}">
-						<p:column width="80">
-							<f:facet name="header">#{msgs.project}</f:facet>
-							<p:inputText label="#{msgs.project}" value="#{dt.projectID}" size="5"/>
-						</p:column>
-						<p:column width="80">
-							<f:facet name="header">#{msgs.workpackage}</f:facet>
-							<p:inputText label="#{msgs.workpackage}" value="#{dt.workPackage}" size="5"/>
-						</p:column>
-						<p:column width="80">
-							<f:facet name="header">#{msgs.sat}</f:facet>
-							<p:inputText label="#{msgs.weekdays}" value="#{dt.hoursForWeek[0]}" size="5"/>
-						</p:column>
-						<p:column width="80">
-							<f:facet name="header">#{msgs.sun}</f:facet>
-							<p:inputText label="#{msgs.weekdays}" value="#{dt.hoursForWeek[1]}" size="5"/>
-						</p:column>
-						<p:column width="80">
-							<f:facet name="header">#{msgs.mon}</f:facet>
-							<p:inputText label="#{msgs.weekdays}" value="#{dt.hoursForWeek[2]}"  size="5"/>
-						</p:column>
-						<p:column width="80">
-							<f:facet name="header">#{msgs.tue}</f:facet>
-							<p:inputText label="#{msgs.weekdays}" value="#{dt.hoursForWeek[3]}"  size="5"/>
-						</p:column>
-						<p:column width="80">
-							<f:facet name="header">#{msgs.wed}</f:facet>
-							<p:inputText label="#{msgs.weekdays}" value="#{dt.hoursForWeek[4]}"  size="5"/>
-						</p:column>
-						<p:column width="80">
-							<f:facet name="header">#{msgs.thu}</f:facet>
-							<p:inputText label="#{msgs.weekdays}" value="#{dt.hoursForWeek[5]}"  size="5"/>
-						</p:column>
-						<p:column width="80">
-							<f:facet name="header">#{msgs.fri}</f:facet>
-							<p:inputText label="#{msgs.weekdays}" value="#{dt.hoursForWeek[6]}"  size="5"/>
-						</p:column>
-						<p:column width="200">
-							<f:facet name="header">#{msgs.notes}</f:facet>
-							<p:inputText label="#{msgs.notes}" value="#{dt.notes}" size="23"/>
-						</p:column>
-					</p:dataTable>
-					<p:spacer height="10" />
-					<p:commandButton action="currentTimeSheet?faces-redirect=true" value="Save" />
-					<p:messages id="messages" showSummary="false" showDetail="true" autoUpdate="true" closable="true"/>
-				</h:form>
-			</ui:define>
+			<h:outputText styleClass="error" value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
+			<h:form rendered="#{login.loggedIn}">
+				<p:dataTable var="row" value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).details}">
+					<p:column width="80">
+						<f:facet name="header">#{msgs.project}</f:facet>
+						<p:inputText label="#{msgs.project}" id="projectID" value="#{row.projectID}" size="5"/>
+					</p:column>
+					<p:column width="80">
+						<f:facet name="header">#{msgs.workpackage}</f:facet>
+						<p:inputText label="#{msgs.workpackage}" id="WP" value="#{row.workPackage}" size="5"/>
+					</p:column>
+					<p:column width="80">
+						<f:facet name="header">#{msgs.sat}</f:facet>
+						<p:inputText label="#{msgs.weekdays}" value="#{row.hoursForWeek[0]}" size="5">
+							<f:validateDoubleRange minimum="0.0" maximum="24.0"/>
+						</p:inputText>
+					</p:column>
+					<p:column width="80">
+						<f:facet name="header">#{msgs.sun}</f:facet>
+						<p:inputText label="#{msgs.weekdays}" value="#{row.hoursForWeek[1]}" size="5" >
+							<f:validateDoubleRange minimum="0.0" maximum="24.0"/>
+						</p:inputText>
+					</p:column>
+					<p:column width="80">
+						<f:facet name="header">#{msgs.mon}</f:facet>
+						<p:inputText label="#{msgs.weekdays}" value="#{row.hoursForWeek[2]}"  size="5">
+							<f:validateDoubleRange minimum="0.0" maximum="24.0"/>
+						</p:inputText>
+					</p:column>
+					<p:column width="80">
+						<f:facet name="header">#{msgs.tue}</f:facet>
+						<p:inputText label="#{msgs.weekdays}" value="#{row.hoursForWeek[3]}"  size="5">
+							<f:validateDoubleRange minimum="0.0" maximum="24.0"/>
+						</p:inputText>
+					</p:column>
+					<p:column width="80">
+						<f:facet name="header">#{msgs.wed}</f:facet>
+						<p:inputText label="#{msgs.weekdays}" value="#{row.hoursForWeek[4]}"  size="5">
+							<f:validateDoubleRange minimum="0.0" maximum="24.0"/>
+						</p:inputText>
+					</p:column>
+					<p:column width="80">
+						<f:facet name="header">#{msgs.thu}</f:facet>
+						<p:inputText label="#{msgs.weekdays}" value="#{row.hoursForWeek[5]}"  size="5">
+							<f:validateDoubleRange minimum="0.0" maximum="24.0"/>
+						</p:inputText>
+					</p:column>
+					<p:column width="80">
+						<f:facet name="header">#{msgs.fri}</f:facet>
+						<p:inputText label="#{msgs.weekdays}" value="#{row.hoursForWeek[6]}"  size="5">
+							<f:validateDoubleRange minimum="0.0" maximum="24.0"/>
+						</p:inputText>
+					</p:column>
+					<p:column width="200">
+						<f:facet name="header">#{msgs.notes}</f:facet>
+						<p:inputText label="#{msgs.notes}" value="#{row.notes}" size="23" validator="#{timesheetDetails.validate}"/>
+					</p:column>
+				</p:dataTable>
+				<p:spacer height="10" />
+				<p:commandButton action="currentTimeSheet?faces-redirect=true" value="#{msgs.save}" />
+				<p:messages id="messages" showSummary="false" showDetail="true" autoUpdate="true" closable="true"/>
+			</h:form>
+		</ui:define>
 	</ui:composition>
 </html>

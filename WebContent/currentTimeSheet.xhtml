@@ -15,69 +15,83 @@
 			</ui:define>
 			
 			<ui:define name="content">
-				<h:outputText value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
-				
+				<h:outputText styleClass="error" value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
 				<h:form rendered="#{login.loggedIn}">
-				
 					<h:panelGrid id="grid" columns="4" cellpadding="10">
-				        <p:outputLabel value="#{msgs.empNo}: "/>
+				        <p:outputLabel value="#{msgs.empNo}"/>
 				        <p:outputLabel value="#{employeeDetails.currentEmployee.empNumber}"/>
-				        <p:outputLabel value="Week number: "/>
+				        <p:outputLabel value="#{msgs.weekNumber}"/>
 				        <p:outputLabel value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).weekNumber}"/>
-				        <p:outputLabel value="#{msgs.empName}: "/>
+				        <p:outputLabel value="#{msgs.empName}"/>
 				        <p:outputLabel value="#{employeeDetails.currentEmployee.name}"/>
-				        <p:outputLabel value="Week ending: "/>
+				        <p:outputLabel value="#{msgs.weekEnding}"/>
 				        <p:outputLabel value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).weekEnding}"/>
 			    	</h:panelGrid>
-			    	
-					<p:dataTable var="dt" value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).details}" >
+			    	<p:dataTable var="list" value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee)}" >
+			    	<p:column headerText="#{msgs.timesheet}">
+					<p:dataTable var="row" value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).details}" >
 						<p:column>
 							<f:facet name="header">#{msgs.project}</f:facet>
-							<h:outputText value="#{dt.projectID}" />
+							<h:outputText value="#{row.projectID}" />
+							<f:facet name="footer">#{msgs.total}</f:facet>
 						</p:column>
 						<p:column>
 							<f:facet name="header">#{msgs.workpackage}</f:facet>
-							<h:outputText value="#{dt.workPackage}" />
+							<h:outputText value="#{row.workPackage}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">#{msgs.total}</f:facet>
+							<h:outputText value="#{row.sum}" />
+							<f:facet name="footer">#{list.totalHours}</f:facet>
 						</p:column>
 						<p:column>
 							<f:facet name="header">#{msgs.sat}</f:facet>
-							<h:outputText value="#{dt.hoursForWeek[0]}" />
+							<h:outputText value="#{row.hoursForWeek[0]}" />
+							<f:facet name="footer">#{list.dailyHours[0]}</f:facet>
 						</p:column>
 						<p:column>
 							<f:facet name="header">#{msgs.sun}</f:facet>
-							<h:outputText value="#{dt.hoursForWeek[1]}" />
+							<h:outputText value="#{row.hoursForWeek[1]}" />
+							<f:facet name="footer">#{list.dailyHours[1]}</f:facet>
 						</p:column>
 						<p:column>
 							<f:facet name="header">#{msgs.mon}</f:facet>
-							<h:outputText value="#{dt.hoursForWeek[2]}" />
+							<h:outputText value="#{row.hoursForWeek[2]}" />
+							<f:facet name="footer">#{list.dailyHours[2]}</f:facet>
 						</p:column>
 						<p:column>
 							<f:facet name="header">#{msgs.tue}</f:facet>
-							<h:outputText value="#{dt.hoursForWeek[3]}" />
+							<h:outputText value="#{row.hoursForWeek[3]}" />
+							<f:facet name="footer">#{list.dailyHours[3]}</f:facet>
 						</p:column>
 						<p:column>
 							<f:facet name="header">#{msgs.wed}</f:facet>
-							<h:outputText value="#{dt.hoursForWeek[4]}" />
+							<h:outputText value="#{row.hoursForWeek[4]}" />
+							<f:facet name="footer">#{list.dailyHours[4]}</f:facet>
 						</p:column>
 						<p:column>
 							<f:facet name="header">#{msgs.thu}</f:facet>
-							<h:outputText value="#{dt.hoursForWeek[5]}" />
+							<h:outputText value="#{row.hoursForWeek[5]}" />
+							<f:facet name="footer">#{list.dailyHours[5]}</f:facet>
 						</p:column>
 						<p:column>
 							<f:facet name="header">#{msgs.fri}</f:facet>
-							<h:outputText value="#{dt.hoursForWeek[6]}" />
+							<h:outputText value="#{row.hoursForWeek[6]}" />
+							<f:facet name="footer">#{list.dailyHours[6]}</f:facet>
 						</p:column>
-						<p:column>
+						<p:column width="350">
 							<f:facet name="header">#{msgs.notes}</f:facet>
-							<h:outputText value="#{dt.notes}" />
+							<h:outputText value="#{row.notes}" />
 						</p:column>
+					</p:dataTable>
+					</p:column>
 					</p:dataTable>
 					<p:spacer height="10" />
 					<p:commandButton action="#{timesheetDetails.addTimesheet}" value="#{msgs.create}" 
 									rendered="#{not timesheetDetails.hasCurrentTimesheet(employeeDetails.currentEmployee)}"/>
-					<p:commandButton action="editTimesheet?faces-redirect=true" value="Edit"
+					<p:commandButton action="editTimesheet?faces-redirect=true" value="#{msgs.edit}"
 									rendered="#{timesheetDetails.hasCurrentTimesheet(employeeDetails.currentEmployee)}"/>
-					<p:commandButton action="#{timesheetDetails.addRows}" value="Add rows"
+					<p:commandButton action="#{timesheetDetails.addRows}" value="#{msgs.addRow}"
 									rendered="#{timesheetDetails.hasCurrentTimesheet(employeeDetails.currentEmployee)}"/>
 				</h:form>
 			</ui:define>
