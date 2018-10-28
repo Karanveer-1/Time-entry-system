@@ -8,9 +8,9 @@
 	<ui:composition>
 		<h:form>
 		    <p:menubar>
-		        <p:submenu label="Timesheet" icon="ui-icon-document">
+		        <p:submenu label="#{msgs.timesheet}" icon="ui-icon-document">
 					<p:menuitem value="#{msgs.currentweek}" action="currentTimeSheet?faces-redirect=true" />
-		            <p:menuitem value="Previous Week" action="allTimesheets?faces-redirect=true" />
+		            <p:menuitem value="#{msgs.prevWeek}" action="allTimesheets?faces-redirect=true" />
 		        </p:submenu>
 		 
 		        <p:submenu label="#{msgs.user}"  icon="ui-icon-person">
