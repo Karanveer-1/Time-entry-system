@@ -10,7 +10,7 @@
    background: #88B5D6;
 }
 
-#loginTitle {
+#title {
 	padding:5px;
 	background-color: #DBDBDB;
 	text-align: center;
@@ -21,4 +21,11 @@
 #footer {
    	text-align: right;
    	background: #88B5D6;
+}
+
+.error {
+	padding:5px;
+	text-align:center;
+	font-size:25px;
+	font-weight:bold;
 }
