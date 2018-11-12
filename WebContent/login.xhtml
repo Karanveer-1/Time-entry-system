@@ -17,7 +17,7 @@
 		<ui:define name="content">
 			<h:form>
 			    <h:panelGrid id="grid" columns="2" cellpadding="10">
-			        <p:outputLabel value="#{msgs.userName}"  for="loginUserName"/>
+			        <p:outputLabel value="#{msgs.loginUserName}"  for="loginUserName"/>
 			        <p:inputText id="loginUserName" value="#{login.credentials.userName}" required="true" />
 			        <p:outputLabel value="#{msgs.password}" for="loginPassword"/>
 			        <p:password id="loginPassword" value="#{login.credentials.password}" validator="#{employeeDetails.validateUsernamePassword}" required="true"/>
