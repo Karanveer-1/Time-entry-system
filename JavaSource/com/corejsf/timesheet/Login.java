@@ -4,8 +4,10 @@ import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 
 import ca.bcit.infosys.employee.Credentials;
+import ca.bcit.infosys.employee.Employee;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Manages current user credentials and logged in status.
@@ -23,6 +25,16 @@ public class Login implements Serializable {
     /** Determines if someone is logged in or not. */
     private boolean loggedIn;
     
+    private List<Employee> list;
+    
+    public List<Employee> getList() {
+        return list;
+    }
+
+    public void setList(List<Employee> list) {
+        this.list = list;
+    }
+
     /** Constructor for Login. */
     public Login() {
         credentials = new Credentials();

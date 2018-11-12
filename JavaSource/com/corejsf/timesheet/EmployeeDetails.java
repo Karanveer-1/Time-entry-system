@@ -14,7 +14,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 
-import com.corejsf.timesheet.data.Data;
+import com.corejsf.timsheet.access.CredentialsManager;
+import com.corejsf.timsheet.access.EmployeeManager;
 
 import ca.bcit.infosys.employee.Credentials;
 import ca.bcit.infosys.employee.Employee;
@@ -32,19 +33,22 @@ public class EmployeeDetails implements EmployeeList {
     private Employee tempEmployee;
     /** Temporary String used for resetting password. */
     private String tempPassword;
-    /** Access the data from sample data class. */
-    @Inject private Data employeeData;
     /** Hold reference of current user. */
     @Inject private Login currentUser;
     /** mechanism for starting conversation. */
     @Inject private Conversation convo;
+    @Inject private CredentialsManager credentialManager;
+    @Inject private EmployeeManager employeeManager;
 
     /** Returns a list of all the employees. */
     @Override
     public List<Employee> getEmployees() {
-        return employeeData.getEmployeeList();
+        if (currentUser.getList() ==  null) {
+            currentUser.setList(employeeManager.getAll());
+        }
+        return currentUser.getList();
     }
-
+    
     /** Returns employee with a given name. */
     @Override
     public Employee getEmployee(String name) {
@@ -72,32 +76,32 @@ public class EmployeeDetails implements EmployeeList {
         return null;
     }
     
-    /** Return map of valid passwords for userNames. */
-    @Override
-    public Map<String, String> getLoginCombos() {
-        return employeeData.getCredentialsMap();
-    }
-
     /** Returns the logged in employee. */
     @Override
     public Employee getCurrentEmployee() {
         return getEmployeeWithUserName(
                 currentUser.getCredentials().getUserName());
     }
-
+    
+    /** Return map of valid passwords for userNames. */
+    @Override
+    public Map<String, String> getLoginCombos() {
+        return credentialManager.getAll();
+    }
+    
     /** Verifies that the loginID and password is a valid combination. */
     @Override
     public boolean verifyUser(Credentials credential) {
-        Map<String, String> loginCredentials = getLoginCombos();
-        if (loginCredentials.containsKey(credential.getUserName())) {
-            if (loginCredentials.get(credential.getUserName()).
-                            equals(credential.getPassword())) {
+        Credentials c = credentialManager.find(credential.getUserName());
+        if (c != null) {
+            if (c.getPassword().equals(credential.getPassword())) {
                 return true;
             }
         }
         System.out.println("Wrong credentials");
         return false;
     }
+    
     /**
      * Validates the loginID and password when user tries to login.
      * @param context 
@@ -122,16 +126,47 @@ public class EmployeeDetails implements EmployeeList {
                             "Incorrect Username or Password"));
         }
     }
-    
+
     /**
      * Change the password for the current user.
      * @return Navigation string 
      */
     public String changePassword() {
-        Map<String, String> loginCredentials = getLoginCombos();
-        loginCredentials.replace(currentUser.getCredentials().getUserName(),
-                currentUser.getCredentials().getPassword());
+        credentialManager.merge(currentUser.getCredentials());
         return "currentTimeSheet?faces-redirect=true";
+    }
+    
+    /** Adds a new Employee to the collection of Employees. */
+    @Override
+    public void addEmployee(Employee newEmployee) {
+        currentUser.getList().add(newEmployee);
+        employeeManager.persist(newEmployee);
+    }
+
+    public void addCredentials(Credentials credentials) {
+        credentialManager.persist(credentials);
+    }
+
+    /** Deletes the specified user from the collection of Users. */
+    @Override
+    public void deleteEmployee(Employee userToDelete) {
+        currentUser.getList().remove(userToDelete);
+        employeeManager.remove(userToDelete);
+        credentialManager.remove(userToDelete.getUserName());
+    }
+
+    /**
+     * Sets the editable property of employee objects in employee list to false.
+     * @return Navigation string
+     */
+    public String save() {
+        for (Employee e : getEmployees()) {
+            if (e.isEditable()) {
+                employeeManager.merge(e);
+                e.setEditable(false);
+            }
+        }
+        return null;
     }
     
     /**
@@ -148,33 +183,6 @@ public class EmployeeDetails implements EmployeeList {
     public Employee getAdministrator() {
         return getEmployeeWithUserName("admin");
     }
-
-    /** Deletes the specified user from the collection of Users. */
-    @Override
-    public void deleteEmployee(Employee userToDelete) {
-        Map<String, String> loginCredentials = getLoginCombos();
-        loginCredentials.remove(userToDelete.getUserName());
-        employeeData.getEmployeeList().remove(userToDelete);
-    }
-
-    /** Adds a new Employee to the collection of Employees. */
-    @Override
-    public void addEmployee(Employee newEmployee) {
-        employeeData.getEmployeeList().add(newEmployee);
-    }
-    
-    /**
-     * Sets the editable property of employee objects in employee list to false.
-     * @return Navigation string
-     */
-    public String save() {
-        for (Employee e : getEmployees()) {
-            if (e.isEditable()) {
-                e.setEditable(false);
-            }
-        }
-        return null;
-    }
     
     /**
      * Begins the conversation sets the tempEmployee value and redirect
@@ -189,22 +197,21 @@ public class EmployeeDetails implements EmployeeList {
     }
     
     /**
-     * Ends the conversation and redirects the user to editUser page.
-     * @return Navigation string
-     */
-    public String endConvo() {
-        convo.end();
-        return "editUsers?faces-redirect=true";
-    }
-    
-    /**
      * Replaces the password in the loginCredentials maps and ends 
      * the conversation.
      * @return Navigation string
      */
     public String savePassword() {
-        Map<String, String> loginCredentials = getLoginCombos();
-        loginCredentials.replace(getTempEmployee().getUserName(), tempPassword);
+        credentialManager.merge(new Credentials(getTempEmployee().getUserName(), getTempPassword()));
+        convo.end();
+        return "editUsers?faces-redirect=true";
+    }
+    
+    /**
+     * Ends the conversation and redirects the user to editUser page.
+     * @return Navigation string
+     */
+    public String cancelReset() {
         convo.end();
         return "editUsers?faces-redirect=true";
     }
@@ -239,11 +246,12 @@ public class EmployeeDetails implements EmployeeList {
      */
     public void setTempEmployee(Employee temp) {
         this.tempEmployee = temp;
-    }
+    } 
     
     @Override
     public String logout(Employee employee) {
         return null;
     }
+
 
 }
