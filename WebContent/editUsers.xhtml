@@ -14,11 +14,15 @@
 			<h:outputText styleClass="error" value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
 			<h:panelGroup rendered="#{login.loggedIn}">
 			<h:outputText styleClass="error" value="#{msgs.permissionErrorMsg}" rendered="#{not employeeDetails.admin}"/>
-			<h:form rendered="#{employeeDetails.admin}">
+			<h:form rendered="#{employeeDetails.admin}" id="formEdit">
 				<p:dataTable var="employee" value="#{employeeDetails.employees}">
 					<p:column>
 						<f:facet name="header">#{msgs.edit}</f:facet>
 						<p:selectBooleanCheckbox value="#{employee.editable}"  onchange="submit()"/>
+					</p:column>
+					<p:column>
+						<f:facet name="header">#{msgs.employeeNumber}</f:facet>
+               			<h:outputText value="#{employee.empNumber}" />
 					</p:column>
 					<p:column>
 						<f:facet name="header">#{msgs.name}</f:facet>
@@ -26,13 +30,9 @@
                			<h:outputText value="#{employee.name}" rendered="#{not employee.editable}"/>
 					</p:column>
 					<p:column>
-						<f:facet name="header">#{msgs.employeeNumber}</f:facet>
-						<p:inputText value="#{employee.empNumber}" rendered="#{employee.editable}" />
-               			<h:outputText value="#{employee.empNumber}" rendered="#{not employee.editable}"/>
-					</p:column>
-					<p:column>
 						<f:facet name="header">#{msgs.username}</f:facet>
-               			<h:outputText value="#{employee.userName}"/>
+						<p:inputText value="#{employee.userName}" rendered="#{employee.editable}" />
+               			<h:outputText value="#{employee.userName}" rendered="#{not employee.editable}" />
 					</p:column>
 					<p:column>
 						<f:facet name="header">#{msgs.resetPassword}</f:facet>
@@ -46,7 +46,7 @@
 					</p:column>
 				</p:dataTable>
 				<p:spacer height="10" />
-				<h:commandButton value="#{msgs.save}" action="#{employeeDetails.save}"/>
+				<p:commandButton value="#{msgs.save}" action="#{employeeDetails.save}" update="formEdit"/>
 				<p:messages id="messages" showSummary="false" showDetail="true" autoUpdate="true" closable="true"/>
 			</h:form>
 			</h:panelGroup>

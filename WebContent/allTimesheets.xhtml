@@ -33,61 +33,61 @@
 					    	</h:panelGrid>
 				    	</p:column>
 				    	<p:column headerText="#{msgs.data}">
-						<p:dataTable var="row" value="#{list.details}" >
-							<p:column>
-								<f:facet name="header">#{msgs.project}</f:facet>
-								<h:outputText value="#{row.projectID}" />
-								<f:facet name="footer">#{msgs.total}</f:facet>
-							</p:column>
-							<p:column>
-								<f:facet name="header">#{msgs.workpackage}</f:facet>
-								<h:outputText value="#{row.workPackage}" />
-							</p:column>
-							<p:column>
-								<f:facet name="header">#{msgs.total}</f:facet>
-								<h:outputText value="#{row.sum}" />
-								<f:facet name="footer">#{list.totalHours}</f:facet>
-							</p:column>
-							<p:column>
-								<f:facet name="header">#{msgs.sat}</f:facet>
-								<h:outputText value="#{row.hoursForWeek[0]}" />
-								<f:facet name="footer">#{list.dailyHours[0]}</f:facet>
-							</p:column>
-							<p:column>
-								<f:facet name="header">#{msgs.sun}</f:facet>
-								<h:outputText value="#{row.hoursForWeek[1]}" />
-								<f:facet name="footer">#{list.dailyHours[1]}</f:facet>
-							</p:column>
-							<p:column>
-								<f:facet name="header">#{msgs.mon}</f:facet>
-								<h:outputText value="#{row.hoursForWeek[2]}" />
-								<f:facet name="footer">#{list.dailyHours[2]}</f:facet>
-							</p:column>
-							<p:column>
-								<f:facet name="header">#{msgs.tue}</f:facet>
-								<h:outputText value="#{row.hoursForWeek[3]}" />
-								<f:facet name="footer">#{list.dailyHours[3]}</f:facet>
-							</p:column>
-							<p:column>
-								<f:facet name="header">#{msgs.wed}</f:facet>
-								<h:outputText value="#{row.hoursForWeek[4]}" />
-								<f:facet name="footer">#{list.dailyHours[4]}</f:facet>
-							</p:column>
-							<p:column>
-								<f:facet name="header">#{msgs.thu}</f:facet>
-								<h:outputText value="#{row.hoursForWeek[5]}" />
-								<f:facet name="footer">#{list.dailyHours[5]}</f:facet>
-							</p:column>
-							<p:column>
-								<f:facet name="header">#{msgs.fri}</f:facet>
-								<h:outputText value="#{row.hoursForWeek[6]}" />
-								<f:facet name="footer">#{list.dailyHours[6]}</f:facet>
-							</p:column>
-							<p:column width="300">
-								<f:facet name="header">#{msgs.notes}</f:facet>
-								<h:outputText value="#{row.notes}" />
-							</p:column>
-						</p:dataTable>
+							<p:dataTable var="row" value="#{list.details}" >
+								<p:column>
+									<f:facet name="header">#{msgs.project}</f:facet>
+									<h:outputText value="#{row.projectID}" />
+									<f:facet name="footer">#{msgs.total}</f:facet>
+								</p:column>
+								<p:column>
+									<f:facet name="header">#{msgs.workpackage}</f:facet>
+									<h:outputText value="#{row.workPackage}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">#{msgs.total}</f:facet>
+									<h:outputText value="#{row.sum}" />
+									<f:facet name="footer">#{list.totalHours}</f:facet>
+								</p:column>
+								<p:column>
+									<f:facet name="header">#{msgs.sat}</f:facet>
+									<h:outputText value="#{row.hoursForWeek[0]}" />
+									<f:facet name="footer">#{list.dailyHours[0]}</f:facet>
+								</p:column>
+								<p:column>
+									<f:facet name="header">#{msgs.sun}</f:facet>
+									<h:outputText value="#{row.hoursForWeek[1]}" />
+									<f:facet name="footer">#{list.dailyHours[1]}</f:facet>
+								</p:column>
+								<p:column>
+									<f:facet name="header">#{msgs.mon}</f:facet>
+									<h:outputText value="#{row.hoursForWeek[2]}" />
+									<f:facet name="footer">#{list.dailyHours[2]}</f:facet>
+								</p:column>
+								<p:column>
+									<f:facet name="header">#{msgs.tue}</f:facet>
+									<h:outputText value="#{row.hoursForWeek[3]}" />
+									<f:facet name="footer">#{list.dailyHours[3]}</f:facet>
+								</p:column>
+								<p:column>
+									<f:facet name="header">#{msgs.wed}</f:facet>
+									<h:outputText value="#{row.hoursForWeek[4]}" />
+									<f:facet name="footer">#{list.dailyHours[4]}</f:facet>
+								</p:column>
+								<p:column>
+									<f:facet name="header">#{msgs.thu}</f:facet>
+									<h:outputText value="#{row.hoursForWeek[5]}" />
+									<f:facet name="footer">#{list.dailyHours[5]}</f:facet>
+								</p:column>
+								<p:column>
+									<f:facet name="header">#{msgs.fri}</f:facet>
+									<h:outputText value="#{row.hoursForWeek[6]}" />
+									<f:facet name="footer">#{list.dailyHours[6]}</f:facet>
+								</p:column>
+								<p:column width="300">
+									<f:facet name="header">#{msgs.notes}</f:facet>
+									<h:outputText value="#{row.notes}" />
+								</p:column>
+							</p:dataTable>
 						</p:column>
 					</p:dataTable>
 				</h:form>

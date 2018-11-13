@@ -19,7 +19,7 @@
 			    	<p:outputLabel value="#{msgs.empName}"  for="empName"/>
 			        <p:inputText id="empName" value="#{user.name}" required="true" />
 			        <p:outputLabel value="#{msgs.empNo}"  for="empNo"/>
-			        <p:inputText id="empNo" value="#{user.empNumber}" required="true" />
+			        <p:outputLabel id="empNo" value="Will be filled by system." />
 			        <p:outputLabel value="#{msgs.username}"  for="empUserName"/>
 			        <p:inputText id="empUserName" value="#{user.userName}" required="true" validator="#{user.validate}" />
 			        <p:outputLabel value="#{msgs.password}" for="empPassword"/>
