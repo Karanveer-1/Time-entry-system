@@ -5,6 +5,7 @@ import javax.inject.Named;
 
 import ca.bcit.infosys.employee.Credentials;
 import ca.bcit.infosys.employee.Employee;
+import ca.bcit.infosys.timesheet.Timesheet;
 
 import java.io.Serializable;
 import java.util.List;
@@ -26,7 +27,16 @@ public class Login implements Serializable {
     private boolean loggedIn;
     
     private List<Employee> list;
+    private List<Timesheet> timesheetList;
     
+    public List<Timesheet> getTimesheetList() {
+        return timesheetList;
+    }
+
+    public void setTimesheetList(List<Timesheet> timesheetList) {
+        this.timesheetList = timesheetList;
+    }
+
     public List<Employee> getList() {
         return list;
     }
@@ -56,6 +66,8 @@ public class Login implements Serializable {
      */
     public String logoutUser() {
         loggedIn = false;
+        list = null;
+        timesheetList = null;
         return "login?faces-redirect=true";
     }
 

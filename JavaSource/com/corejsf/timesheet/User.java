@@ -31,8 +31,9 @@ public class User extends Employee {
      * @return Navigation string
      */
     public String add() {
-        emp.addCredentials(new Credentials(this.getUserName(), password));
-        emp.addEmployee(this);
+        if (emp.addCredentials(new Credentials(this.getUserName(), password))) {
+            emp.addEmployee(this);
+        }
         return "editUsers?faces-redirect=true";
     }
     

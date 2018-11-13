@@ -57,7 +57,6 @@ public class EmployeeDetails implements EmployeeList {
                 return emp;
             }
         }
-        System.out.println("User not found!");
         return null;
     }
     
@@ -72,7 +71,6 @@ public class EmployeeDetails implements EmployeeList {
                 return emp;
             }
         }
-        System.out.println("User not found!");
         return null;
     }
     
@@ -98,7 +96,6 @@ public class EmployeeDetails implements EmployeeList {
                 return true;
             }
         }
-        System.out.println("Wrong credentials");
         return false;
     }
     
@@ -139,19 +136,21 @@ public class EmployeeDetails implements EmployeeList {
     /** Adds a new Employee to the collection of Employees. */
     @Override
     public void addEmployee(Employee newEmployee) {
-        currentUser.getList().add(newEmployee);
-        employeeManager.persist(newEmployee);
+        if (employeeManager.persist(newEmployee)) {
+            currentUser.getList().add(newEmployee);
+        }
     }
 
-    public void addCredentials(Credentials credentials) {
-        credentialManager.persist(credentials);
+    public boolean addCredentials(Credentials credentials) {
+        return credentialManager.persist(credentials);
     }
 
     /** Deletes the specified user from the collection of Users. */
     @Override
     public void deleteEmployee(Employee userToDelete) {
-        currentUser.getList().remove(userToDelete);
-        employeeManager.remove(userToDelete);
+        if (employeeManager.remove(userToDelete)) {
+            currentUser.getList().remove(userToDelete);
+        }
         credentialManager.remove(userToDelete.getUserName());
     }
 
