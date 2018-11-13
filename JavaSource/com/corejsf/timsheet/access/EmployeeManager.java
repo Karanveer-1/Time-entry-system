@@ -31,7 +31,7 @@ public class EmployeeManager implements Serializable {
                 connection = ds.getConnection();
                 try {
                     stmt = connection.createStatement();
-                    ResultSet result = stmt.executeQuery("SELECT * FROM CREDENTIALS WHERE EMPLOYEE_ID = '" + id + "'");
+                    ResultSet result = stmt.executeQuery("SELECT * FROM EMPLOYEE WHERE EMPLOYEE_ID = '" + id + "'");
                     if (result.next()) {
                         return new Employee(result.getString("EMPLOYEE_NAME"), result.getInt("EMPLOYEE_ID"), result.getString("EMPLOYEE_USERNAME"));
                     } else {
@@ -54,18 +54,23 @@ public class EmployeeManager implements Serializable {
         }
     }
 
-    public void persist(Employee emp) {
+    public boolean persist(Employee emp) {
         Connection connection = null;
         PreparedStatement stmt = null;
+        Statement stmt1 = null;
         try {
             try {
                 connection = ds.getConnection();
                 try {
-                    stmt = connection.prepareStatement("INSERT INTO EMPLOYEE VALUES (?, ?, ?)");
-                    stmt.setInt(1, emp.getEmpNumber());
-                    stmt.setString(2, emp.getName());
-                    stmt.setString(3, emp.getUserName());
+                    stmt = connection.prepareStatement("INSERT INTO EMPLOYEE(EMPLOYEE_NAME, EMPLOYEE_USERNAME) VALUES (?, ?)");
+                    stmt.setString(1, emp.getName());
+                    stmt.setString(2, emp.getUserName());
                     stmt.executeUpdate();
+                    stmt1 = connection.createStatement();
+                    ResultSet result = stmt1.executeQuery("SELECT LAST_INSERT_ID()");
+                    if(result.next()) {
+                        emp.setEmpNumber(result.getInt(1));
+                    }
                 } finally {
                     if (stmt != null) {
                         stmt.close();
@@ -79,9 +84,13 @@ public class EmployeeManager implements Serializable {
         } catch (SQLException ex) {
             System.out.println("Error in persist " + emp);
             ex.printStackTrace();
+            return false;
         }
+        return true;
 
     }
+    
+    // issue below, need to add username when we edit employee
 
     public void merge(Employee emp) {
         Connection connection = null;
@@ -110,7 +119,7 @@ public class EmployeeManager implements Serializable {
         }
     }
 
-    public void remove(Employee emp) {
+    public boolean remove(Employee emp) {
         Connection connection = null;        
         PreparedStatement stmt = null;
         try {
@@ -133,7 +142,9 @@ public class EmployeeManager implements Serializable {
         } catch (SQLException ex) {
             System.out.println("Error in remove " + emp);
             ex.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     public List<Employee> getAll() {

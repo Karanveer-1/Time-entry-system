@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import com.corejsf.timesheet.data.Data;
+import com.corejsf.timsheet.access.TimesheetManager;
 
 import ca.bcit.infosys.employee.Employee;
 import ca.bcit.infosys.timesheet.Timesheet;
@@ -38,31 +39,76 @@ public class TimesheetDetails implements TimesheetCollection {
     @Inject private Data timesheetData;
     /** Manager for Employees. */
     @Inject private EmployeeDetails emp;
+    /** Hold reference of current user. */
+    @Inject private Login currentUser;
+    
+    
+    
     
     /** Map for storing all projectID(key) 
      *  and WP(value) pairs in a given timesheet. 
      */
-    private Map<String, ArrayList<String>> projectWP =
-                        new HashMap<String, ArrayList<String>>();
+    private Map<String, ArrayList<String>> projectWP = new HashMap<String, ArrayList<String>>();
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    @Inject TimesheetManager timesheetManager;
     
     /** timesheets getter. */
     @Override
     public List<Timesheet> getTimesheets() {
-        return timesheetData.getTimesheetList();
+        return timesheetManager.getAll();
     }
 
     /** Get all timesheets for an employee. */
     @Override
     public List<Timesheet> getTimesheets(Employee e) {
-        ArrayList<Timesheet> allTimesheets = new ArrayList<Timesheet>();
-        for (Timesheet ts: getTimesheets()) {
-            if (ts.getEmployee().getEmpNumber() == e.getEmpNumber()) {
-                allTimesheets.add(ts);
+        if (currentUser.getTimesheetList() == null) {
+            ArrayList<Timesheet> allTimesheetsForEmployee = new ArrayList<Timesheet>();
+            for (Timesheet ts: getTimesheets()) {
+                if (ts.getEmployee().getEmpNumber() == e.getEmpNumber()) {
+                    allTimesheetsForEmployee.add(ts);
+                }
             }
+            currentUser.setTimesheetList(allTimesheetsForEmployee);
         }
-        return allTimesheets;
+        return currentUser.getTimesheetList();
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
     /**
      * Checks if user has a timesheet for the current week or not.
      * @param e Employee for which it checks
@@ -104,12 +150,41 @@ public class TimesheetDetails implements TimesheetCollection {
         return null;
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     /** Creates a Timesheet object and adds it to the collection. */
     @Override
     public String addTimesheet() {
         Timesheet temp = new Timesheet();
-        ArrayList<TimesheetRow> tempRows = 
-                        (ArrayList<TimesheetRow>) temp.getDetails();
+        ArrayList<TimesheetRow> tempRows = (ArrayList<TimesheetRow>) temp.getDetails();
         for (int i = 0; i < ADDITIONAL_ROWS; i++) {
             tempRows.add(new TimesheetRow());
         }
@@ -129,6 +204,30 @@ public class TimesheetDetails implements TimesheetCollection {
         }
         return "editTimesheet?faces-redirect=true";
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     /**
      * Validate whether WP and ProjectIDs are unique in a timesheet.

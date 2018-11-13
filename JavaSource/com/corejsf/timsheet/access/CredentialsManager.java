@@ -53,7 +53,7 @@ public class CredentialsManager implements Serializable {
         }
     }
 
-    public void persist(Credentials cred) {
+    public boolean persist(Credentials cred) {
         Connection connection = null;
         PreparedStatement stmt = null;
         try {
@@ -77,7 +77,10 @@ public class CredentialsManager implements Serializable {
         } catch (SQLException ex) {
             System.out.println("Error in persist " + cred);
             ex.printStackTrace();
+            return false;
         }
+        
+        return true;
     }
 
     public void merge(Credentials cred) {
@@ -107,7 +110,7 @@ public class CredentialsManager implements Serializable {
         }
     }
 
-    public void remove(String userName) {
+    public boolean remove(String userName) {
         Connection connection = null;        
         PreparedStatement stmt = null;
         try {
@@ -130,7 +133,9 @@ public class CredentialsManager implements Serializable {
         } catch (SQLException ex) {
             System.out.println("Error in remove " + userName);
             ex.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     public Map<String, String> getAll() {
@@ -164,6 +169,5 @@ public class CredentialsManager implements Serializable {
 
         return credentialsMap;
     }
-
 
 }
