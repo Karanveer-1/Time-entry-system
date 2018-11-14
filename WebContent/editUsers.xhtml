@@ -25,14 +25,13 @@
                			<h:outputText value="#{employee.empNumber}" />
 					</p:column>
 					<p:column>
+						<f:facet name="header">#{msgs.username}</f:facet>
+               			<h:outputText value="#{employee.userName}" />
+					</p:column>
+					<p:column>
 						<f:facet name="header">#{msgs.name}</f:facet>
 						<p:inputText value="#{employee.name}" rendered="#{employee.editable}" />
                			<h:outputText value="#{employee.name}" rendered="#{not employee.editable}"/>
-					</p:column>
-					<p:column>
-						<f:facet name="header">#{msgs.username}</f:facet>
-						<p:inputText value="#{employee.userName}" rendered="#{employee.editable}" />
-               			<h:outputText value="#{employee.userName}" rendered="#{not employee.editable}" />
 					</p:column>
 					<p:column>
 						<f:facet name="header">#{msgs.resetPassword}</f:facet>

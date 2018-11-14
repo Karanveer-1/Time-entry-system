@@ -89,8 +89,6 @@ public class EmployeeManager implements Serializable {
         return true;
 
     }
-    
-    // issue below, need to add username when we edit employee
 
     public void merge(Employee emp) {
         Connection connection = null;

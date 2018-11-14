@@ -169,21 +169,6 @@ public class EmployeeDetails implements EmployeeList {
     }
     
     /**
-     * Return true if user is admin else false.
-     * @return a boolean
-     */
-    public boolean isAdmin() {
-        return currentUser.getCredentials().
-                        getUserName().equals(getAdministrator().getUserName());
-    }
-    
-    /** returns the employee object with username of password. */
-    @Override
-    public Employee getAdministrator() {
-        return getEmployeeWithUserName("admin");
-    }
-    
-    /**
      * Begins the conversation sets the tempEmployee value and redirect
      * user to resetPasswor page.
      * @param e change password for this employee
@@ -214,6 +199,37 @@ public class EmployeeDetails implements EmployeeList {
         convo.end();
         return "editUsers?faces-redirect=true";
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /**
+     * Return true if user is admin else false.
+     * @return a boolean
+     */
+    public boolean isAdmin() {
+        return currentUser.getCredentials().
+                        getUserName().equals(getAdministrator().getUserName());
+    }
+    
+    /** returns the employee object with username of password. */
+    @Override
+    public Employee getAdministrator() {
+        return getEmployeeWithUserName("admin");
+    }
+   
+    
+    
+    
+    
+    
+    
+    
     
     /**
      * Return the temporary password.
@@ -251,6 +267,5 @@ public class EmployeeDetails implements EmployeeList {
     public String logout(Employee employee) {
         return null;
     }
-
 
 }
