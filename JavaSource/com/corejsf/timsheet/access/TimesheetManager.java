@@ -2,6 +2,8 @@ package com.corejsf.timsheet.access;
 
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -32,16 +34,37 @@ public class TimesheetManager implements Serializable {
         return null;
     }
 
-    public void persist(Timesheet emp) {
-        //insert
+    public boolean persist(Timesheet newSheet) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            try {
+                connection = ds.getConnection();
+                try {
+                    stmt = connection.prepareStatement("INSERT INTO TIMESHEET VALUES (?, ?)");
+                    stmt.setInt(1, newSheet.getEmployee().getEmpNumber());
+                    stmt.setDate(2, new Date(newSheet.getEndWeek().getTime()));
+                    stmt.executeUpdate();
+                } finally {
+                    if (stmt != null) {
+                        stmt.close();
+                    }
+                }
+            } finally {
+                if (connection != null) {
+                    connection.close();
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error in persist " + newSheet);
+            ex.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
     public void merge(Timesheet emp) {
         //update
-    }
-
-    public void remove(Timesheet emp) {
-        //delete
     }
 
     public List<Timesheet> getAll() {

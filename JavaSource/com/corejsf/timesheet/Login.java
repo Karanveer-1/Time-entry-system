@@ -57,6 +57,8 @@ public class Login implements Serializable {
      */
     public String loginUser() {
         loggedIn = true;
+        list = null;
+        timesheetList = null;
         return "currentTimeSheet?faces-redirect=true";
     }
     
@@ -66,8 +68,6 @@ public class Login implements Serializable {
      */
     public String logoutUser() {
         loggedIn = false;
-        list = null;
-        timesheetList = null;
         return "login?faces-redirect=true";
     }
 

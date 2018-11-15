@@ -16,16 +16,16 @@
 			
 			<ui:define name="content">
 				<h:outputText styleClass="error" value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
-				<h:form rendered="#{login.loggedIn}">
+				<h:form rendered="#{login.loggedIn}" id="tableForm">
 					<h:panelGrid id="grid" columns="4" cellpadding="10">
 				        <p:outputLabel value="#{msgs.empNo}"/>
 				        <p:outputLabel value="#{employeeDetails.currentEmployee.empNumber}"/>
 				        <p:outputLabel value="#{msgs.weekNumber}"/>
-				        <p:outputLabel value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).weekNumber}"/>
+				        <p:outputLabel value="#{timesheetDetails.weekNumber}"/>
 				        <p:outputLabel value="#{msgs.empName}"/>
 				        <p:outputLabel value="#{employeeDetails.currentEmployee.name}"/>
 				        <p:outputLabel value="#{msgs.weekEnding}"/>
-				        <p:outputLabel value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).weekEnding}"/>
+				        <p:outputLabel value="#{timesheetDetails.weekEnding}"/>
 			    	</h:panelGrid>
 			    	<p:dataTable var="list" value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee)}" >
 			    		<p:column headerText="#{msgs.timesheet}">
@@ -87,11 +87,11 @@
 						</p:column>
 					</p:dataTable>
 					<p:spacer height="10" />
-					<p:commandButton action="#{timesheetDetails.addTimesheet}" value="#{msgs.create}" 
+					<p:commandButton action="#{timesheetDetails.addTimesheet}" value="#{msgs.create}" update="tableForm"
 									rendered="#{not timesheetDetails.hasCurrentTimesheet(employeeDetails.currentEmployee)}"/>
 					<p:commandButton action="editTimesheet?faces-redirect=true" value="#{msgs.edit}"
 									rendered="#{timesheetDetails.hasCurrentTimesheet(employeeDetails.currentEmployee)}"/>
-					<p:commandButton action="#{timesheetDetails.addRows}" value="#{msgs.addRow}"
+					<p:commandButton action="#{timesheetDetails.addRows}" value="#{msgs.addRow}" update="tableForm"
 									rendered="#{timesheetDetails.hasCurrentTimesheet(employeeDetails.currentEmployee)}"/>
 				</h:form>
 			</ui:define>

@@ -3,6 +3,7 @@ package com.corejsf.timsheet.access;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -14,6 +15,7 @@ import javax.annotation.Resource;
 import javax.enterprise.context.ConversationScoped;
 import javax.sql.DataSource;
 
+import ca.bcit.infosys.employee.Employee;
 import ca.bcit.infosys.timesheet.TimesheetRow;
 
 @ConversationScoped
@@ -57,4 +59,38 @@ public class TimesheetRowManager implements Serializable {
         }
         return rowList;
     }
+    
+    public boolean persist(Employee e, Date d) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            try {
+                connection = ds.getConnection();
+                try {
+                    stmt = connection.prepareStatement("INSERT INTO TIMESHEETROW(EMPLOYEE_ID, END_WEEK) VALUES (?, ?)");
+                    stmt.setInt(1, e.getEmpNumber());
+                    stmt.setDate(2, new java.sql.Date(d.getTime()));
+                    stmt.executeUpdate();
+                } finally {
+                    if (stmt != null) {
+                        stmt.close();
+                    }
+                }
+            } finally {
+                if (connection != null) {
+                    connection.close();
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error in persist " + e + " " + d);
+            ex.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+    
+    
+    
+    
+    
 }

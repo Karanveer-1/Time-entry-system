@@ -17,8 +17,8 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.corejsf.timesheet.data.Data;
 import com.corejsf.timsheet.access.TimesheetManager;
+import com.corejsf.timsheet.access.TimesheetRowManager;
 
 import ca.bcit.infosys.employee.Employee;
 import ca.bcit.infosys.timesheet.Timesheet;
@@ -35,36 +35,19 @@ import ca.bcit.infosys.timesheet.TimesheetRow;
 public class TimesheetDetails implements TimesheetCollection {
     /** Upper limit for additional rows. */
     private static final int ADDITIONAL_ROWS = 5;
-    /** Access the data from sample data class. */
-    @Inject private Data timesheetData;
     /** Manager for Employees. */
     @Inject private EmployeeDetails emp;
     /** Hold reference of current user. */
     @Inject private Login currentUser;
     
-    
-    
-    
     /** Map for storing all projectID(key) 
      *  and WP(value) pairs in a given timesheet. 
      */
     private Map<String, ArrayList<String>> projectWP = new HashMap<String, ArrayList<String>>();
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+       
     @Inject TimesheetManager timesheetManager;
+    @Inject TimesheetRowManager rowManager;
     
     /** timesheets getter. */
     @Override
@@ -88,40 +71,54 @@ public class TimesheetDetails implements TimesheetCollection {
     }
     
     
+    public String getWeekEnding() {
+        Calendar c = getCalender();
+        return (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.DAY_OF_MONTH) + "/" + c.get(Calendar.YEAR);
+    }
     
+    public int getWeekNumber() {
+        Calendar c = getCalender();
+        return c.get(Calendar.WEEK_OF_YEAR);
+    }
     
+    /** Creates a Timesheet object and adds it to the collection. */
+    @Override
+    public String addTimesheet() {
+        Timesheet temp = new Timesheet();
+        ArrayList<TimesheetRow> tempRows = (ArrayList<TimesheetRow>) temp.getDetails();
+        
+        for (int i = 0; i < ADDITIONAL_ROWS; i++) {
+            tempRows.add(new TimesheetRow());
+        }
+        temp.setEmployee(emp.getCurrentEmployee());
+        if (timesheetManager.persist(temp)) {
+            currentUser.getTimesheetList().add(temp);
+            for(int i = 0; i < ADDITIONAL_ROWS; i++) {
+                rowManager.persist(temp.getEmployee(), temp.getEndWeek());
+            }
+        }
+        return null;
+    }
     
+    /**
+     * Adds more rows in the timesheet.
+     * @return Navigation string
+     */
+    public String addRows() {
+        Timesheet temp = getCurrentTimesheet(emp.getCurrentEmployee());
+        if (rowManager.persist(temp.getEmployee(), temp.getEndWeek())) {
+            temp.getDetails().add(new TimesheetRow());
+        }
+        return null;
+    }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-   
     /**
      * Checks if user has a timesheet for the current week or not.
      * @param e Employee for which it checks
      * @return a boolean
      */
     public boolean hasCurrentTimesheet(Employee e) {
-        Calendar c = new GregorianCalendar();
-        int currentDay = c.get(Calendar.DAY_OF_WEEK);
-        int leftDays = Calendar.FRIDAY - currentDay;
-        c.add(Calendar.DATE, leftDays);
-        Date endWeek = c.getTime();
-        c.setTime(endWeek);
-        c.setFirstDayOfWeek(Calendar.SATURDAY);
+        Calendar c = getCalender();
         
         for (Timesheet ts: getTimesheets(e)) {
             if (ts.getWeekNumber() == c.get(Calendar.WEEK_OF_YEAR)) {
@@ -134,13 +131,7 @@ public class TimesheetDetails implements TimesheetCollection {
     /** Get current timesheet for an employee. */
     @Override
     public Timesheet getCurrentTimesheet(Employee e) {
-        Calendar c = new GregorianCalendar();
-        int currentDay = c.get(Calendar.DAY_OF_WEEK);
-        int leftDays = Calendar.FRIDAY - currentDay;
-        c.add(Calendar.DATE, leftDays);
-        Date endWeek = c.getTime();
-        c.setTime(endWeek);
-        c.setFirstDayOfWeek(Calendar.SATURDAY);
+        Calendar c = getCalender();
 
         for (Timesheet ts: getTimesheets(e)) {
             if (ts.getWeekNumber() == c.get(Calendar.WEEK_OF_YEAR)) {
@@ -149,85 +140,17 @@ public class TimesheetDetails implements TimesheetCollection {
         }
         return null;
     }
-
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    /** Creates a Timesheet object and adds it to the collection. */
-    @Override
-    public String addTimesheet() {
-        Timesheet temp = new Timesheet();
-        ArrayList<TimesheetRow> tempRows = (ArrayList<TimesheetRow>) temp.getDetails();
-        for (int i = 0; i < ADDITIONAL_ROWS; i++) {
-            tempRows.add(new TimesheetRow());
-        }
-        temp.setEmployee(emp.getCurrentEmployee());
-        timesheetData.getTimesheetList().add(temp);
-        return "editTimesheet?faces-redirect=true";
+    private Calendar getCalender() {
+        Calendar c = new GregorianCalendar();
+        int currentDay = c.get(Calendar.DAY_OF_WEEK);
+        int leftDays = Calendar.FRIDAY - currentDay;
+        c.add(Calendar.DATE, leftDays);
+        Date endWeek = c.getTime();
+        c.setTime(endWeek);
+        c.setFirstDayOfWeek(Calendar.SATURDAY);
+        return c;
     }
-
-    /**
-     * Adds more rows in the timesheet.
-     * @return Navigation string
-     */
-    public String addRows() {
-        Timesheet temp = getCurrentTimesheet(emp.getCurrentEmployee());
-        for (int i = 0; i < ADDITIONAL_ROWS; i++) {
-            temp.getDetails().add(new TimesheetRow());
-        }
-        return "editTimesheet?faces-redirect=true";
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     /**
      * Validate whether WP and ProjectIDs are unique in a timesheet.
