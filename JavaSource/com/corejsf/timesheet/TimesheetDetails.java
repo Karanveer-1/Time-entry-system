@@ -81,6 +81,10 @@ public class TimesheetDetails implements TimesheetCollection {
         return c.get(Calendar.WEEK_OF_YEAR);
     }
     
+    
+    
+    
+    
     /** Creates a Timesheet object and adds it to the collection. */
     @Override
     public String addTimesheet() {
@@ -88,13 +92,15 @@ public class TimesheetDetails implements TimesheetCollection {
         ArrayList<TimesheetRow> tempRows = (ArrayList<TimesheetRow>) temp.getDetails();
         
         for (int i = 0; i < ADDITIONAL_ROWS; i++) {
-            tempRows.add(new TimesheetRow());
+            TimesheetRow tr = new TimesheetRow();
+            tempRows.add(tr);
         }
         temp.setEmployee(emp.getCurrentEmployee());
         if (timesheetManager.persist(temp)) {
             currentUser.getTimesheetList().add(temp);
             for(int i = 0; i < ADDITIONAL_ROWS; i++) {
                 rowManager.persist(temp.getEmployee(), temp.getEndWeek());
+                temp.getDetails().get(i).setId(rowManager.getLastId());
             }
         }
         return null;
@@ -108,9 +114,11 @@ public class TimesheetDetails implements TimesheetCollection {
         Timesheet temp = getCurrentTimesheet(emp.getCurrentEmployee());
         if (rowManager.persist(temp.getEmployee(), temp.getEndWeek())) {
             temp.getDetails().add(new TimesheetRow());
+            temp.getDetails().get(temp.getDetails().size()-1).setId(rowManager.getLastId());
         }
         return null;
     }
+    
     
     /**
      * Checks if user has a timesheet for the current week or not.
@@ -181,6 +189,17 @@ public class TimesheetDetails implements TimesheetCollection {
             data.add(wp);
             projectWP.put(projectID, data);
         }
+    }
+    
+    public String save() {
+        Employee currentUser = emp.getCurrentEmployee();
+        Timesheet ts = getCurrentTimesheet(currentUser);
+        
+        for (TimesheetRow tr: ts.getDetails()) {
+            rowManager.merge(tr);
+        }
+        
+        return "currentTimeSheet?faces-redirect=true";
     }
     
 }

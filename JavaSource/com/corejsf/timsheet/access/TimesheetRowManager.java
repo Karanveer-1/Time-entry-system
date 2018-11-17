@@ -36,11 +36,13 @@ public class TimesheetRowManager implements Serializable {
                     stmt = connection.createStatement();
                     ResultSet result = stmt.executeQuery("SELECT * FROM TIMESHEETROW WHERE EMPLOYEE_ID = '" + id + "' AND END_WEEK = '" + endweek + "'");
                     while (result.next()) {
-                        rowList.add(new TimesheetRow(result.getInt("PROJECT_ID"), result.getString("WORK_PACKAGE"),
+                        TimesheetRow tr = new TimesheetRow(result.getInt("PROJECT_ID"), result.getString("WORK_PACKAGE"),
                                         new BigDecimal[] {result.getBigDecimal("SAT"), result.getBigDecimal("SUN"),
-                                                result.getBigDecimal("MON"), result.getBigDecimal("TUE"), result.getBigDecimal("WED"),
-                                                result.getBigDecimal("THU"), result.getBigDecimal("FRI") },
-                                                result.getString("NOTES")));
+                                        result.getBigDecimal("MON"), result.getBigDecimal("TUE"), result.getBigDecimal("WED"),
+                                        result.getBigDecimal("THU"), result.getBigDecimal("FRI") },
+                                        result.getString("NOTES"));
+                        tr.setId(result.getInt("ID"));
+                        rowList.add(tr);
                     }
                 } finally {
                     if (stmt != null) {
@@ -89,8 +91,81 @@ public class TimesheetRowManager implements Serializable {
         return true;
     }
     
+    public void merge(TimesheetRow row) {
+        Connection connection = null;
+        PreparedStatement stmt = null;
+        try {
+            try {
+                connection = ds.getConnection();
+                try {
+                    stmt = connection.prepareStatement("UPDATE TIMESHEETROW SET PROJECT_ID = ?, WORK_PACKAGE = ?, NOTES = ?,"
+                            + " SAT=?, SUN=?, MON=?, TUE=?, WED=?, THU=?, FRI=? WHERE ID = ?");
+                    stmt.setInt(1, row.getProjectID());
+                    stmt.setString(2, row.getWorkPackage());
+                    stmt.setString(3, row.getNotes());
+                    stmt.setBigDecimal(4, row.getHour(0));
+                    stmt.setBigDecimal(5, row.getHour(1));
+                    stmt.setBigDecimal(6, row.getHour(2));
+                    stmt.setBigDecimal(7, row.getHour(3));
+                    stmt.setBigDecimal(8, row.getHour(4));
+                    stmt.setBigDecimal(9, row.getHour(5));
+                    stmt.setBigDecimal(10, row.getHour(6));
+                    stmt.setInt(11, row.getId());
+                    stmt.executeUpdate();
+                } finally {
+                    if (stmt != null) {
+                        stmt.close();
+                    }
+                }
+            } finally {
+                if (connection != null) {
+                    connection.close();
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error in merge " + row);
+            ex.printStackTrace();
+        }
+    }
     
-    
+    public int getLastId() {
+        Connection connection = null;
+        Statement stmt = null;
+        try {
+            try {
+                connection = ds.getConnection();
+                try {
+                    stmt = connection.createStatement();
+                    ResultSet result = stmt.executeQuery("SELECT LAST_INSERT_ID()");
+                    if(result.next()) {
+                        return result.getInt(1);
+                    }
+                } finally {
+                    if (stmt != null) {
+                        stmt.close();
+                    }
+                }
+            } finally {
+                if (connection != null) {
+                    connection.close();
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error in getLastId");
+            ex.printStackTrace();
+        }
+        return 0;
+    }
     
     
 }
+
+
+
+
+
+
+
+
+
+
