@@ -1,7 +1,9 @@
 package com.corejsf.timesheet;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
@@ -118,9 +120,12 @@ public class EmployeeDetails implements EmployeeList {
         boolean valid = verifyUser(temp);
 
         if (!valid) {
+            FacesContext facescontext = FacesContext.getCurrentInstance();
+            Locale locale = facescontext.getViewRoot().getLocale();
+            ResourceBundle bundle = ResourceBundle.getBundle("com.corejsf.timesheet.messages", locale);
             throw new ValidatorException(
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
-                            "Incorrect Username or Password"));
+                            bundle.getString("incorrectUsernameOrPassword")));
         }
     }
 

@@ -1,6 +1,8 @@
 package com.corejsf.timesheet;
 
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -51,11 +53,11 @@ public class User extends Employee {
         boolean contains = credentialsMap.containsKey(un);
         
         if (contains) {
+            FacesContext facescontext = FacesContext.getCurrentInstance();
+            Locale locale = facescontext.getViewRoot().getLocale();
+            ResourceBundle bundle = ResourceBundle.getBundle("com.corejsf.timesheet.messages", locale);
             throw new ValidatorException(
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
-                    "This user name is already taken. Please try another one.",
-                    "This user name is already taken. Please try another one.")
-                    );
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "", bundle.getString("usernameerror")));
         }
     }
     

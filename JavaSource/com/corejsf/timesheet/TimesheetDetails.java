@@ -1,13 +1,14 @@
 package com.corejsf.timesheet;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -172,6 +173,10 @@ public class TimesheetDetails implements TimesheetCollection {
         Integer projectID = null;
         String wp = null;
         boolean hoursAdded = false;
+        
+        FacesContext facescontext = FacesContext.getCurrentInstance();
+        Locale locale = facescontext.getViewRoot().getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle("com.corejsf.timesheet.messages", locale);
                 
         if (projectInput.isValid() && wpInput.isValid() && inputHoursSat.isValid()
                 && inputHoursSun.isValid() && inputHoursMon.isValid() && inputHoursTue.isValid()
@@ -191,24 +196,24 @@ public class TimesheetDetails implements TimesheetCollection {
   
             if (hoursAdded) {
                 if (projectID == 0 || wp.equals("")) {
-                    throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "ProjectID and WP must be filled in, if you want to fill hours."));
+                    throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "", bundle.getString("WPandIDreqForHours")));
                 }
             }
             
             if (projectID < 0) {
-                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Project ID must be non-negative"));
+                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "", bundle.getString("projectIdMustBeNonNegative")));
             }
             
             if (!wp.isEmpty() && projectID.equals(0)) {
                 throw new ValidatorException(
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Project ID must be filled for WP: " + wp));
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "", bundle.getString("projectIdReq") + wp));
             }else if (projectID != 0 && wp.isEmpty()) {
                 throw new ValidatorException(
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "WorkPackage must be filled for project ID: " + projectID));
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "", bundle.getString("WPReq") + projectID));
             }else if (projectWP.containsKey(projectID)) {
                 ArrayList<String> wpList = projectWP.get(projectID);
                 if (wpList.contains(wp)) {
-                    throw new ValidatorException( new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "WorkPackage must be a unique for a given project ID"));
+                    throw new ValidatorException( new FacesMessage(FacesMessage.SEVERITY_ERROR, "", bundle.getString("uniqueWPAndProjectID")));
                 } else {
                     wpList.add(wp);
                 }
