@@ -17,8 +17,8 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import com.corejsf.timsheet.access.TimesheetManager;
-import com.corejsf.timsheet.access.TimesheetRowManager;
+import com.corejsf.timesheet.access.TimesheetManager;
+import com.corejsf.timesheet.access.TimesheetRowManager;
 
 import ca.bcit.infosys.employee.Employee;
 import ca.bcit.infosys.timesheet.Timesheet;
@@ -81,10 +81,6 @@ public class TimesheetDetails implements TimesheetCollection {
         return c.get(Calendar.WEEK_OF_YEAR);
     }
     
-    
-    
-    
-    
     /** Creates a Timesheet object and adds it to the collection. */
     @Override
     public String addTimesheet() {
@@ -118,18 +114,15 @@ public class TimesheetDetails implements TimesheetCollection {
         }
         return null;
     }
-    
-    
+      
     /**
      * Checks if user has a timesheet for the current week or not.
      * @param e Employee for which it checks
      * @return a boolean
      */
     public boolean hasCurrentTimesheet(Employee e) {
-        Calendar c = getCalender();
-        
         for (Timesheet ts: getTimesheets(e)) {
-            if (ts.getWeekNumber() == c.get(Calendar.WEEK_OF_YEAR)) {
+            if (ts.getWeekEnding().equals(getWeekEnding())) {
                 return true;
             }
         }
@@ -139,10 +132,8 @@ public class TimesheetDetails implements TimesheetCollection {
     /** Get current timesheet for an employee. */
     @Override
     public Timesheet getCurrentTimesheet(Employee e) {
-        Calendar c = getCalender();
-
         for (Timesheet ts: getTimesheets(e)) {
-            if (ts.getWeekNumber() == c.get(Calendar.WEEK_OF_YEAR)) {
+            if (ts.getWeekEnding().equals(getWeekEnding())) {
                 return ts;
             }
         }

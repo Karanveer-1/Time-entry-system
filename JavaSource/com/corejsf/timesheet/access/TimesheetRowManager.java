@@ -1,4 +1,4 @@
-package com.corejsf.timsheet.access;
+package com.corejsf.timesheet.access;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

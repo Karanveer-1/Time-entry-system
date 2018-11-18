@@ -46,7 +46,9 @@
 				</p:dataTable>
 				<p:spacer height="10" />
 				<p:commandButton value="#{msgs.save}" action="#{employeeDetails.save}" update="formEdit"/>
-				<p:messages id="messages" showSummary="false" showDetail="true" autoUpdate="true" closable="true"/>
+				<p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+					<p:autoUpdate/>
+				</p:messages>
 			</h:form>
 			</h:panelGroup>
 		</ui:define>

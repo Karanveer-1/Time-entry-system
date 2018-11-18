@@ -1,6 +1,7 @@
 package com.corejsf.timesheet;
 
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import ca.bcit.infosys.employee.Credentials;
@@ -28,6 +29,7 @@ public class Login implements Serializable {
     
     private List<Employee> list;
     private List<Timesheet> timesheetList;
+    @Inject LocaleChanger localeChanger;
     
     public List<Timesheet> getTimesheetList() {
         return timesheetList;

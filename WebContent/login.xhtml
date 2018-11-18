@@ -24,7 +24,9 @@
 			    </h:panelGrid>
 			    <p:spacer height="10" />
 			    <p:commandButton value="#{msgs.login}" action="#{login.loginUser}" update="grid"/>
-			    <p:messages id="messages" showSummary="false" showDetail="true" autoUpdate="true" closable="true"/>
+			    <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+			    	<p:autoUpdate/>
+			    </p:messages>
 			</h:form>
 		</ui:define>
 	</ui:composition>

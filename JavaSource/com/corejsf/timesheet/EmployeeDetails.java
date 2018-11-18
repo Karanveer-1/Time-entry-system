@@ -13,9 +13,8 @@ import javax.faces.validator.ValidatorException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-
-import com.corejsf.timsheet.access.CredentialsManager;
-import com.corejsf.timsheet.access.EmployeeManager;
+import com.corejsf.timesheet.access.CredentialsManager;
+import com.corejsf.timesheet.access.EmployeeManager;
 
 import ca.bcit.infosys.employee.Credentials;
 import ca.bcit.infosys.employee.Employee;
@@ -29,6 +28,7 @@ import ca.bcit.infosys.employee.EmployeeList;
 @Named
 @ConversationScoped
 public class EmployeeDetails implements EmployeeList {
+    private static final String adminUserName = "admin";
     /** Temporary employee used for resetting password. */
     private Employee tempEmployee;
     /** Temporary String used for resetting password. */
@@ -200,14 +200,6 @@ public class EmployeeDetails implements EmployeeList {
         return "editUsers?faces-redirect=true";
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
     /**
      * Return true if user is admin else false.
      * @return a boolean
@@ -220,17 +212,9 @@ public class EmployeeDetails implements EmployeeList {
     /** returns the employee object with username of password. */
     @Override
     public Employee getAdministrator() {
-        return getEmployeeWithUserName("admin");
+        return getEmployeeWithUserName(adminUserName);
     }
-   
-    
-    
-    
-    
-    
-    
-    
-    
+
     /**
      * Return the temporary password.
      * @return a string

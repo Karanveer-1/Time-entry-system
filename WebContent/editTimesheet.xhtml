@@ -12,15 +12,17 @@
 		
 		<ui:define name="content">
 			<h:outputText styleClass="error" value="#{msgs.loginmsg}" rendered="#{not login.loggedIn}"/>
-			<h:form rendered="#{login.loggedIn}">
+			<h:form rendered="#{login.loggedIn}" id="editTimesheetForm">
 				<p:dataTable var="row" value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).details}">
 					<p:column width="80">
 						<f:facet name="header">#{msgs.project}</f:facet>
-						<p:inputText label="#{msgs.project}" id="projectID" value="#{row.projectID}" size="5"/>
+						<p:inputText label="#{msgs.project}" id="projectID" value="#{row.projectID}" size="5" />
 					</p:column>
 					<p:column width="80">
 						<f:facet name="header">#{msgs.workpackage}</f:facet>
-						<p:inputText label="#{msgs.workpackage}" id="WP" value="#{row.workPackage}" size="5"/>
+						<p:inputText label="#{msgs.workpackage}" id="WP" value="#{row.workPackage}" size="5">
+							<f:validateLength maximum="5" />
+						</p:inputText>
 					</p:column>
 					<p:column width="80">
 						<f:facet name="header">#{msgs.sat}</f:facet>
@@ -66,12 +68,16 @@
 					</p:column>
 					<p:column width="200">
 						<f:facet name="header">#{msgs.notes}</f:facet>
-						<p:inputText label="#{msgs.notes}" value="#{row.notes}" size="23" validator="#{timesheetDetails.validate}"/>
+						<p:inputText label="#{msgs.notes}" value="#{row.notes}" size="23" validator="#{timesheetDetails.validate}">
+							<f:validateLength maximum="50" />
+						</p:inputText>
 					</p:column>
 				</p:dataTable>
 				<p:spacer height="10" />
-				<p:commandButton action="#{timesheetDetails.save}" value="#{msgs.save}" />
-				<p:messages id="messages" showSummary="false" showDetail="true" autoUpdate="true" closable="true"/>
+				<p:commandButton action="#{timesheetDetails.save}" value="#{msgs.save}" update="editTimesheetForm" />
+				<p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+					<p:autoUpdate/>
+				</p:messages>
 			</h:form>
 		</ui:define>
 	</ui:composition>

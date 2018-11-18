@@ -17,17 +17,25 @@
 			<h:form rendered="#{employeeDetails.admin}">
 			    <h:panelGrid columns="2" id="grid" cellpadding="10">
 			    	<p:outputLabel value="#{msgs.empName}"  for="empName"/>
-			        <p:inputText id="empName" value="#{user.name}" required="true" />
+			        <p:inputText id="empName" value="#{user.name}" required="true">
+			        	<f:validateLength maximum="80" />
+			        </p:inputText>
 			        <p:outputLabel value="#{msgs.empNo}"  for="empNo"/>
 			        <p:outputLabel id="empNo" value="Will be filled by system." />
 			        <p:outputLabel value="#{msgs.username}"  for="empUserName"/>
-			        <p:inputText id="empUserName" value="#{user.userName}" required="true" validator="#{user.validate}" />
+			        <p:inputText id="empUserName" value="#{user.userName}" required="true" validator="#{user.validate}">
+			        	<f:validateLength minimum="4" maximum="15" />
+			        </p:inputText>
 			        <p:outputLabel value="#{msgs.password}" for="empPassword"/>
-			        <p:password id="empPassword" value="#{user.password}" required="true"/>
+			        <p:password id="empPassword" value="#{user.password}" required="true">
+			        	<f:validateLength minimum="6" maximum="50" />
+			        </p:password>
 			    </h:panelGrid>
 			    <p:spacer height="10" />
 			    <p:commandButton value="#{msgs.create}" action="#{user.add}" update="grid"/>
-			    <p:messages id="messages" showSummary="false" showDetail="true" autoUpdate="true" closable="true"/>
+			    <p:messages id="messages" showSummary="false" showDetail="true" closable="true">
+			    	<p:autoUpdate/>
+			    </p:messages>
 			</h:form>
 			</h:panelGroup>
 		</ui:define>
