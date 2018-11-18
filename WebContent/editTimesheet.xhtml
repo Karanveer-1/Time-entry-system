@@ -16,7 +16,7 @@
 				<p:dataTable var="row" value="#{timesheetDetails.getCurrentTimesheet(employeeDetails.currentEmployee).details}">
 					<p:column width="80">
 						<f:facet name="header">#{msgs.project}</f:facet>
-						<p:inputText label="#{msgs.project}" id="projectID" value="#{row.projectID}" size="5" />
+						<p:inputText label="#{msgs.project}" id="projectID" value="#{row.projectID}" size="5"  />
 					</p:column>
 					<p:column width="80">
 						<f:facet name="header">#{msgs.workpackage}</f:facet>
@@ -26,49 +26,49 @@
 					</p:column>
 					<p:column width="80">
 						<f:facet name="header">#{msgs.sat}</f:facet>
-						<p:inputText label="#{msgs.weekdays}" value="#{row.hoursForWeek[0]}" size="5">
-							<f:validateDoubleRange minimum="0.0" maximum="24.0"/>
+						<p:inputText label="#{msgs.weekdays}" id="InputHoursSat" value="#{row.hoursForWeek[0]}" size="5"  validator="#{timesheetDetails.validateFraction}">
+							<f:validateDoubleRange minimum="0" maximum="24"/>
 						</p:inputText>
 					</p:column>
 					<p:column width="80">
 						<f:facet name="header">#{msgs.sun}</f:facet>
-						<p:inputText label="#{msgs.weekdays}" value="#{row.hoursForWeek[1]}" size="5" >
-							<f:validateDoubleRange minimum="0.0" maximum="24.0"/>
+						<p:inputText label="#{msgs.weekdays}" id="InputHoursSun" value="#{row.hoursForWeek[1]}" size="5"  validator="#{timesheetDetails.validateFraction}">
+							<f:validateDoubleRange minimum="0" maximum="24"/>
 						</p:inputText>
 					</p:column>
 					<p:column width="80">
 						<f:facet name="header">#{msgs.mon}</f:facet>
-						<p:inputText label="#{msgs.weekdays}" value="#{row.hoursForWeek[2]}"  size="5">
-							<f:validateDoubleRange minimum="0.0" maximum="24.0"/>
+						<p:inputText label="#{msgs.weekdays}" id="InputHoursMon" value="#{row.hoursForWeek[2]}"  size="5"  validator="#{timesheetDetails.validateFraction}">
+							<f:validateDoubleRange minimum="0" maximum="24"/>
 						</p:inputText>
 					</p:column>
 					<p:column width="80">
 						<f:facet name="header">#{msgs.tue}</f:facet>
-						<p:inputText label="#{msgs.weekdays}" value="#{row.hoursForWeek[3]}"  size="5">
-							<f:validateDoubleRange minimum="0.0" maximum="24.0"/>
+						<p:inputText label="#{msgs.weekdays}" id="InputHoursTue" value="#{row.hoursForWeek[3]}"  size="5"  validator="#{timesheetDetails.validateFraction}">
+							<f:validateDoubleRange minimum="0" maximum="24"/>
 						</p:inputText>
 					</p:column>
 					<p:column width="80">
 						<f:facet name="header">#{msgs.wed}</f:facet>
-						<p:inputText label="#{msgs.weekdays}" value="#{row.hoursForWeek[4]}"  size="5">
-							<f:validateDoubleRange minimum="0.0" maximum="24.0"/>
+						<p:inputText label="#{msgs.weekdays}" id="InputHoursWed" value="#{row.hoursForWeek[4]}"  size="5"  validator="#{timesheetDetails.validateFraction}">
+							<f:validateDoubleRange minimum="0" maximum="24"/>
 						</p:inputText>
 					</p:column>
 					<p:column width="80">
 						<f:facet name="header">#{msgs.thu}</f:facet>
-						<p:inputText label="#{msgs.weekdays}" value="#{row.hoursForWeek[5]}"  size="5">
-							<f:validateDoubleRange minimum="0.0" maximum="24.0"/>
+						<p:inputText label="#{msgs.weekdays}" id="InputHoursThu" value="#{row.hoursForWeek[5]}"  size="5"  validator="#{timesheetDetails.validateFraction}">
+							<f:validateDoubleRange minimum="0" maximum="24"/>
 						</p:inputText>
 					</p:column>
 					<p:column width="80">
 						<f:facet name="header">#{msgs.fri}</f:facet>
-						<p:inputText label="#{msgs.weekdays}" value="#{row.hoursForWeek[6]}"  size="5">
-							<f:validateDoubleRange minimum="0.0" maximum="24.0"/>
+						<p:inputText label="#{msgs.weekdays}" id="InputHoursFri" value="#{row.hoursForWeek[6]}"  size="5" validator="#{timesheetDetails.validateFraction}">
+							<f:validateDoubleRange minimum="0" maximum="24"/>
 						</p:inputText>
 					</p:column>
 					<p:column width="200">
 						<f:facet name="header">#{msgs.notes}</f:facet>
-						<p:inputText label="#{msgs.notes}" value="#{row.notes}" size="23" validator="#{timesheetDetails.validate}">
+						<p:inputText label="#{msgs.notes}" value="#{row.notes}" size="23" validator="#{timesheetDetails.validateData}">
 							<f:validateLength maximum="50" />
 						</p:inputText>
 					</p:column>
