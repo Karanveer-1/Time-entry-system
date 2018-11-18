@@ -9,20 +9,22 @@
 		<h:outputStylesheet library="css" name="styles.css"/>
 	</h:head>
 	<h:body>
-		<div id="header">
-			<ui:insert name="header">
-				<ui:include src="/sections/header.xhtml"/>
-			</ui:insert>
-		</div>
-		
-		<div id="navBar">
-			<ui:insert name="navBar">
-				<ui:include src="/sections/navigationBar.xhtml" />
-			</ui:insert>
-		</div>
-		
-		<div id="content">
-			<ui:insert name="content"/>
-		</div>	
+		<f:view locale="#{localeChanger.locale}">
+			<div id="header">
+				<ui:insert name="header">
+					<ui:include src="/sections/header.xhtml"/>
+				</ui:insert>
+			</div>
+			
+			<div id="navBar">
+				<ui:insert name="navBar">
+					<ui:include src="/sections/navigationBar.xhtml" />
+				</ui:insert>
+			</div>
+			
+			<div id="content">
+				<ui:insert name="content"/>
+			</div>
+		</f:view>
 	</h:body>
 </html>

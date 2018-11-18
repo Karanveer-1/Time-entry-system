@@ -21,10 +21,15 @@
 		        <p:submenu label="#{msgs.settings}" icon="ui-icon-gear">
 		        	<p:menuitem value="#{msgs.changePassword}" action="changePassword?faces-redirect=true" icon="ui-icon-pencil" />
 		        </p:submenu>
-		 
+		        
+		        <p:submenu label="#{localeChanger.language}">
+		            <p:menuitem value="#{msgs.english}" action="#{localeChanger.englishAction}" immediate="true" ajax="false"/>
+		            <p:menuitem value="#{msgs.french}" action="#{localeChanger.frenchAction}" immediate="true" ajax="false"/>
+		        </p:submenu>
+		        
 		        <f:facet name="options">
-		         	<p:commandButton action="#{login.logoutUser}" value="#{msgs.login}" icon="ui-icon-extlink" rendered="#{not login.loggedIn}" />
-		            <p:commandButton action="#{login.logoutUser}" value="#{msgs.logout}" icon="ui-icon-extlink" rendered="#{login.loggedIn}"/>
+					<p:commandButton action="#{login.logoutUser}" value="#{msgs.login}" icon="ui-icon-extlink" rendered="#{not login.loggedIn}" />
+        			<p:commandButton action="#{login.logoutUser}" value="#{msgs.logout}" icon="ui-icon-extlink" rendered="#{login.loggedIn}"/>
 		        </f:facet>
 		    </p:menubar>
 		</h:form>
