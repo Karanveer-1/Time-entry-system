@@ -17,11 +17,11 @@
 			<h:form rendered="#{employeeDetails.admin}">
 			    <h:panelGrid columns="2" id="grid" cellpadding="10">
 			    	<p:outputLabel value="#{msgs.empName}"  for="empName"/>
-			        <p:inputText id="empName" value="#{user.name}" required="true">
+			        <p:inputText id="empName" value="#{user.name}" required="true" validator="#{user.validateName}">
 			        	<f:validateLength maximum="80" />
 			        </p:inputText>
 			        <p:outputLabel value="#{msgs.empNo}"  for="empNo"/>
-			        <p:outputLabel id="empNo" value="Will be filled by system." />
+			        <p:outputLabel id="empNo" value="#{msgs.filledBySysem}" />
 			        <p:outputLabel value="#{msgs.username}"  for="empUserName"/>
 			        <p:inputText id="empUserName" value="#{user.userName}" required="true" validator="#{user.validate}">
 			        	<f:validateLength minimum="4" maximum="15" />

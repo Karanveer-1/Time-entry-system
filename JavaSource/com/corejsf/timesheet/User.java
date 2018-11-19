@@ -44,7 +44,7 @@ public class User extends Employee {
     }
 
     /**
-     * Validates whether the user name is unique or already taken.
+     * Validates whether the user name is unique.
      * 
      * @param context 
      * @param component 
@@ -53,22 +53,53 @@ public class User extends Employee {
     public void validate(FacesContext context,
             UIComponent component, Object value) {
         String un = value.toString().trim();
+        
         Map<String, String> credentialsMap = emp.getLoginCombos();
+        
+        FacesContext facescontext = FacesContext.getCurrentInstance();
+        Locale locale = facescontext.getViewRoot().getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle(
+                        "com.corejsf.timesheet.messages", locale);
+        
+        if (un.isEmpty()) {
+            throw new ValidatorException(new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, "",
+                    bundle.getString("emptyUsername")));
+        }
 
         boolean contains = credentialsMap.containsKey(un);
 
         if (contains) {
-            FacesContext facescontext = FacesContext.getCurrentInstance();
-            Locale locale = facescontext.getViewRoot().getLocale();
-            ResourceBundle bundle = 
-                    ResourceBundle.getBundle(
-                            "com.corejsf.timesheet.messages", locale);
             throw new ValidatorException(
                     new FacesMessage(FacesMessage.SEVERITY_ERROR,
                             "", bundle.getString("usernameerror")));
         }
 
     }
+    
+    /**
+     * Validates whether the Employee name is empty.
+     * 
+     * @param context 
+     * @param component 
+     * @param value 
+     */
+    public void validateName(FacesContext context,
+                        UIComponent component, Object value) {
+        String name = value.toString().trim();
+        FacesContext facescontext = FacesContext.getCurrentInstance();
+        Locale locale = facescontext.getViewRoot().getLocale();
+        ResourceBundle bundle = ResourceBundle.getBundle(
+                        "com.corejsf.timesheet.messages", locale);
+        
+        if (name.isEmpty()) {
+            throw new ValidatorException(new FacesMessage(
+                    FacesMessage.SEVERITY_ERROR, "", 
+                    bundle.getString("emptyName")));
+        }
+        
+    }
+    
 
     /**
      * Redirects the user to createNewUser page.
