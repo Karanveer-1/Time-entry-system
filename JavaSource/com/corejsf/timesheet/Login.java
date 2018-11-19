@@ -1,7 +1,6 @@
 package com.corejsf.timesheet;
 
 import javax.enterprise.context.SessionScoped;
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import ca.bcit.infosys.employee.Credentials;
@@ -26,27 +25,11 @@ public class Login implements Serializable {
     private Credentials credentials;
     /** Determines if someone is logged in or not. */
     private boolean loggedIn;
-    
+    /** List of all the employees from Database. */
     private List<Employee> list;
+    /** List of all the timesheets for current user from Database. */
     private List<Timesheet> timesheetList;
-    @Inject LocaleChanger localeChanger;
     
-    public List<Timesheet> getTimesheetList() {
-        return timesheetList;
-    }
-
-    public void setTimesheetList(List<Timesheet> timesheetList) {
-        this.timesheetList = timesheetList;
-    }
-
-    public List<Employee> getList() {
-        return list;
-    }
-
-    public void setList(List<Employee> list) {
-        this.list = list;
-    }
-
     /** Constructor for Login. */
     public Login() {
         credentials = new Credentials();
@@ -96,4 +79,37 @@ public class Login implements Serializable {
     public void setCredentials(Credentials credentials) {
         this.credentials = credentials;
     }
+    
+    /**
+     * Timesheet list getter.
+     * @return all timesheets for current employee
+     */
+    public List<Timesheet> getTimesheetList() {
+        return timesheetList;
+    }
+    
+    /**
+     * Timesheet list setter.
+     * @param timesheetList the list to set to
+     */
+    public void setTimesheetList(List<Timesheet> timesheetList) {
+        this.timesheetList = timesheetList;
+    }
+
+    /**
+     * Employee list getter.
+     * @return list of all the employees
+     */
+    public List<Employee> getList() {
+        return list;
+    }
+
+    /**
+     * Employee list setter.
+     * @param list of all the employees
+     */
+    public void setList(List<Employee> list) {
+        this.list = list;
+    }
+
 }

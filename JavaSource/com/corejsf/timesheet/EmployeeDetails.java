@@ -24,13 +24,14 @@ import ca.bcit.infosys.employee.EmployeeList;
 
 /**
  * Responsible for managing user details between UI and Database layers (CRUD).
- * @author Karanveer
+ * @author Karanveer Khanna
  * @version 1.1
  */
 @Named
 @ConversationScoped
 public class EmployeeDetails implements EmployeeList {
-    private static final String adminUserName = "admin";
+    /** Admin's user name. */
+    private static final String ADMIN_USERNAME = "admin";
     /** Temporary employee used for resetting password. */
     private Employee tempEmployee;
     /** Temporary String used for resetting password. */
@@ -39,7 +40,9 @@ public class EmployeeDetails implements EmployeeList {
     @Inject private Login currentUser;
     /** mechanism for starting conversation. */
     @Inject private Conversation convo;
+    /** Manager from Credentials objects.*/
     @Inject private CredentialsManager credentialManager;
+    /** Manager from Employee objects.*/
     @Inject private EmployeeManager employeeManager;
 
     /** Returns a list of all the employees. */
@@ -122,7 +125,8 @@ public class EmployeeDetails implements EmployeeList {
         if (!valid) {
             FacesContext facescontext = FacesContext.getCurrentInstance();
             Locale locale = facescontext.getViewRoot().getLocale();
-            ResourceBundle bundle = ResourceBundle.getBundle("com.corejsf.timesheet.messages", locale);
+            ResourceBundle bundle = ResourceBundle.getBundle(
+                    "com.corejsf.timesheet.messages", locale);
             throw new ValidatorException(
                     new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
                             bundle.getString("incorrectUsernameOrPassword")));
@@ -138,7 +142,7 @@ public class EmployeeDetails implements EmployeeList {
         return "currentTimeSheet?faces-redirect=true";
     }
     
-    /** Adds a new Employee to the collection of Employees. */
+    /** Adds a new Employee to the database using Employee manager. */
     @Override
     public void addEmployee(Employee newEmployee) {
         if (employeeManager.persist(newEmployee)) {
@@ -146,11 +150,16 @@ public class EmployeeDetails implements EmployeeList {
         }
     }
 
+    /**
+     * Adds the credentials into the database.
+     * @param credentials credentials to be add
+     * @return true if successful else false
+     */
     public boolean addCredentials(Credentials credentials) {
         return credentialManager.persist(credentials);
     }
 
-    /** Deletes the specified user from the collection of Users. */
+    /** Deletes the specified user from the Database. */
     @Override
     public void deleteEmployee(Employee userToDelete) {
         if (employeeManager.remove(userToDelete)) {
@@ -160,7 +169,9 @@ public class EmployeeDetails implements EmployeeList {
     }
 
     /**
-     * Sets the editable property of employee objects in employee list to false.
+     * Sets the editable property of employee objects
+     * in employee list to false and merge the
+     * changes to the database, if any.
      * @return Navigation string
      */
     public String save() {
@@ -186,12 +197,13 @@ public class EmployeeDetails implements EmployeeList {
     }
     
     /**
-     * Replaces the password in the loginCredentials maps and ends 
-     * the conversation.
+     * Update the password in the database using credentials manager.
      * @return Navigation string
      */
     public String savePassword() {
-        credentialManager.merge(new Credentials(getTempEmployee().getUserName(), getTempPassword()));
+        credentialManager.merge(
+                new Credentials(getTempEmployee().getUserName(),
+                        getTempPassword()));
         convo.end();
         return "editUsers?faces-redirect=true";
     }
@@ -214,10 +226,10 @@ public class EmployeeDetails implements EmployeeList {
                         getUserName().equals(getAdministrator().getUserName());
     }
     
-    /** returns the employee object with username of password. */
+    /** Returns the employee object with username of admin. */
     @Override
     public Employee getAdministrator() {
-        return getEmployeeWithUserName(adminUserName);
+        return getEmployeeWithUserName(ADMIN_USERNAME);
     }
 
     /**

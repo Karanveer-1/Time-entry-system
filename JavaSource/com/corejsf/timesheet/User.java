@@ -16,7 +16,8 @@ import ca.bcit.infosys.employee.Credentials;
 import ca.bcit.infosys.employee.Employee;
 
 /**
- * Responsible for creating and validating users. 
+ * Responsible for creating and validating users.
+ * 
  * @author Karanveer
  * @version 1.1
  */
@@ -24,61 +25,72 @@ import ca.bcit.infosys.employee.Employee;
 @RequestScoped
 public class User extends Employee {
     /** Manager for Employees. */
-    @Inject private EmployeeDetails emp;
+    @Inject
+    private EmployeeDetails emp;
     /** Password of the newly created user. */
     private String password;
-    
+
     /**
      * Adds the newly created user to the sample employee list.
+     * 
      * @return Navigation string
      */
     public String add() {
+
         if (emp.addCredentials(new Credentials(this.getUserName(), password))) {
             emp.addEmployee(this);
         }
         return "editUsers?faces-redirect=true";
     }
-    
+
     /**
      * Validates whether the user name is unique or already taken.
+     * 
      * @param context 
      * @param component 
      * @param value 
      */
     public void validate(FacesContext context,
-                        UIComponent component, Object value) {
-        String un = value.toString();
+            UIComponent component, Object value) {
+        String un = value.toString().trim();
         Map<String, String> credentialsMap = emp.getLoginCombos();
-        
+
         boolean contains = credentialsMap.containsKey(un);
-        
+
         if (contains) {
             FacesContext facescontext = FacesContext.getCurrentInstance();
             Locale locale = facescontext.getViewRoot().getLocale();
-            ResourceBundle bundle = ResourceBundle.getBundle("com.corejsf.timesheet.messages", locale);
+            ResourceBundle bundle = 
+                    ResourceBundle.getBundle(
+                            "com.corejsf.timesheet.messages", locale);
             throw new ValidatorException(
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "", bundle.getString("usernameerror")));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "", bundle.getString("usernameerror")));
         }
+
     }
-    
+
     /**
      * Redirects the user to createNewUser page.
+     * 
      * @return Navigation string
      */
     public String create() {
         return "createNewUser?faces-redirect=true";
     }
-    
+
     /**
      * Redirects the user to editUsers page.
+     * 
      * @return Navigation string
      */
     public String edit() {
         return "editUsers?faces-redirect=true";
     }
-    
+
     /**
      * Getter for password string.
+     * 
      * @return a string
      */
     public String getPassword() {
@@ -87,10 +99,11 @@ public class User extends Employee {
 
     /**
      * Sets the password.
+     * 
      * @param password the password to set to
      */
     public void setPassword(String password) {
         this.password = password;
     }
-        
+
 }

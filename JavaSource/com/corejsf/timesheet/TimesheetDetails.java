@@ -41,15 +41,16 @@ public class TimesheetDetails implements TimesheetCollection {
     @Inject private EmployeeDetails emp;
     /** Hold reference of current user. */
     @Inject private Login currentUser;
+    /** Manager from Timesheet objects.*/
+    @Inject private TimesheetManager timesheetManager;
+    /** Manager from TimesheetRow objects.*/
+    @Inject private TimesheetRowManager rowManager;
     
     /** Map for storing all projectID(key) 
      *  and WP(value) pairs in a given timesheet. 
      */
-    private Map<Integer, ArrayList<String>> projectWP = new HashMap<Integer, ArrayList<String>>();
-
-       
-    @Inject TimesheetManager timesheetManager;
-    @Inject TimesheetRowManager rowManager;
+    private Map<Integer, ArrayList<String>> projectWP =
+            new HashMap<Integer, ArrayList<String>>();
     
     /** timesheets getter. */
     @Override
@@ -61,7 +62,8 @@ public class TimesheetDetails implements TimesheetCollection {
     @Override
     public List<Timesheet> getTimesheets(Employee e) {
         if (currentUser.getTimesheetList() == null) {
-            ArrayList<Timesheet> allTimesheetsForEmployee = new ArrayList<Timesheet>();
+            ArrayList<Timesheet> allTimesheetsForEmployee =
+                    new ArrayList<Timesheet>();
             for (Timesheet ts: getTimesheets()) {
                 if (ts.getEmployee().getEmpNumber() == e.getEmpNumber()) {
                     allTimesheetsForEmployee.add(ts);
@@ -72,22 +74,34 @@ public class TimesheetDetails implements TimesheetCollection {
         return currentUser.getTimesheetList();
     }
     
-    
+    /**
+     * Calculate the current end week's date as a string.
+     * @return the endWeek as string
+     */
     public String getWeekEnding() {
         Calendar c = getCalender();
-        return (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.DAY_OF_MONTH) + "/" + c.get(Calendar.YEAR);
+        return (c.get(Calendar.MONTH) + 1) 
+                + "/" + c.get(Calendar.DAY_OF_MONTH)
+                + "/" + c.get(Calendar.YEAR);
     }
     
+    /**
+     * Returns the current week number.
+     * @return the calculated week number
+     */
     public int getWeekNumber() {
         Calendar c = getCalender();
         return c.get(Calendar.WEEK_OF_YEAR);
     }
     
-    /** Creates a Timesheet object and adds it to the collection. */
+    /**
+     * Creates a new timesheet and adds that to database.
+     */
     @Override
     public String addTimesheet() {
         Timesheet temp = new Timesheet();
-        ArrayList<TimesheetRow> tempRows = (ArrayList<TimesheetRow>) temp.getDetails();
+        ArrayList<TimesheetRow> tempRows =
+                (ArrayList<TimesheetRow>) temp.getDetails();
         
         for (int i = 0; i < ADDITIONAL_ROWS; i++) {
             TimesheetRow tr = new TimesheetRow();
@@ -96,7 +110,7 @@ public class TimesheetDetails implements TimesheetCollection {
         temp.setEmployee(emp.getCurrentEmployee());
         if (timesheetManager.persist(temp)) {
             currentUser.getTimesheetList().add(temp);
-            for(int i = 0; i < ADDITIONAL_ROWS; i++) {
+            for (int i = 0; i < ADDITIONAL_ROWS; i++) {
                 rowManager.persist(temp.getEmployee(), temp.getEndWeek());
                 temp.getDetails().get(i).setId(rowManager.getLastId());
             }
@@ -112,7 +126,9 @@ public class TimesheetDetails implements TimesheetCollection {
         Timesheet temp = getCurrentTimesheet(emp.getCurrentEmployee());
         if (rowManager.persist(temp.getEmployee(), temp.getEndWeek())) {
             temp.getDetails().add(new TimesheetRow());
-            temp.getDetails().get(temp.getDetails().size()-1).setId(rowManager.getLastId());
+            temp.getDetails().get(
+                    temp.getDetails().size() - 1).
+                    setId(rowManager.getLastId());
         }
         return null;
     }
@@ -142,6 +158,10 @@ public class TimesheetDetails implements TimesheetCollection {
         return null;
     }
     
+    /**
+     * Sets the calender object.
+     * @return calender object
+     */
     private Calendar getCalender() {
         Calendar c = new GregorianCalendar();
         int currentDay = c.get(Calendar.DAY_OF_WEEK);
@@ -159,28 +179,25 @@ public class TimesheetDetails implements TimesheetCollection {
      * @param component 
      * @param value 
      */
-    public void validateData(FacesContext context, UIComponent component, Object value) {
+    public void validateData(FacesContext context,
+            UIComponent component, Object value) {
         UIInput projectInput = (UIInput) component.findComponent("projectID");
         UIInput wpInput = (UIInput) component.findComponent("WP");
-        UIInput inputHoursSat = (UIInput) component.findComponent("InputHoursSat");
-        UIInput inputHoursSun = (UIInput) component.findComponent("InputHoursSun");
-        UIInput inputHoursMon = (UIInput) component.findComponent("InputHoursMon");
-        UIInput inputHoursTue = (UIInput) component.findComponent("InputHoursTue");
-        UIInput inputHoursWed = (UIInput) component.findComponent("InputHoursWed");
-        UIInput inputHoursThu = (UIInput) component.findComponent("InputHoursThu");
-        UIInput inputHoursFri = (UIInput) component.findComponent("InputHoursFri");
+        UIInput inputSat = (UIInput) component.findComponent("InputHoursSat");
+        UIInput inputSun = (UIInput) component.findComponent("InputHoursSun");
+        UIInput inputMon = (UIInput) component.findComponent("InputHoursMon");
+        UIInput inputTue = (UIInput) component.findComponent("InputHoursTue");
+        UIInput inputWed = (UIInput) component.findComponent("InputHoursWed");
+        UIInput inputThu = (UIInput) component.findComponent("InputHoursThu");
+        UIInput inputFri = (UIInput) component.findComponent("InputHoursFri");
         
         Integer projectID = null;
         String wp = null;
-        boolean hoursAdded = false;
-        
-        FacesContext facescontext = FacesContext.getCurrentInstance();
-        Locale locale = facescontext.getViewRoot().getLocale();
-        ResourceBundle bundle = ResourceBundle.getBundle("com.corejsf.timesheet.messages", locale);
                 
-        if (projectInput.isValid() && wpInput.isValid() && inputHoursSat.isValid()
-                && inputHoursSun.isValid() && inputHoursMon.isValid() && inputHoursTue.isValid()
-                && inputHoursWed.isValid() && inputHoursThu.isValid() && inputHoursFri.isValid()) {
+        if (projectInput.isValid() && wpInput.isValid() && inputSat.isValid()
+                && inputSun.isValid() && inputMon.isValid() 
+                && inputTue.isValid() && inputWed.isValid()
+                && inputThu.isValid() && inputFri.isValid()) {
             projectID = (Integer) projectInput.getLocalValue();
             wp = wpInput.getLocalValue().toString();
             
@@ -188,32 +205,42 @@ public class TimesheetDetails implements TimesheetCollection {
                 projectID = 0;
             }
             
-            if (inputHoursSat.getLocalValue() != null || inputHoursSun.getLocalValue() != null || inputHoursMon.getLocalValue() != null
-                    || inputHoursTue.getLocalValue() != null
-                    || inputHoursWed.getLocalValue() != null || inputHoursThu.getLocalValue() != null || inputHoursFri.getLocalValue() != null) {
-                hoursAdded = true;
-            }
-  
-            if (hoursAdded) {
+            if (inputSat.getLocalValue() != null  
+                    || inputSun.getLocalValue() != null 
+                    || inputMon.getLocalValue() != null
+                    || inputTue.getLocalValue() != null
+                    || inputWed.getLocalValue() != null 
+                    || inputThu.getLocalValue() != null 
+                    || inputFri.getLocalValue() != null) {
+                
                 if (projectID == 0 || wp.equals("")) {
-                    throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "", bundle.getString("WPandIDreqForHours")));
+                    throw new ValidatorException(
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+                                 getBundle().getString("WPandIDreqForHours")));
                 }
             }
+  
             
             if (projectID < 0) {
-                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "", bundle.getString("projectIdMustBeNonNegative")));
+                throw new ValidatorException(
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+                         getBundle().getString("projectIdMustBeNonNegative")));
             }
             
             if (!wp.isEmpty() && projectID.equals(0)) {
                 throw new ValidatorException(
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "", bundle.getString("projectIdReq") + wp));
-            }else if (projectID != 0 && wp.isEmpty()) {
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "", 
+                                getBundle().getString("projectIdReq") + wp));
+            } else if (projectID != 0 && wp.isEmpty()) {
                 throw new ValidatorException(
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "", bundle.getString("WPReq") + projectID));
-            }else if (projectWP.containsKey(projectID)) {
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "", 
+                                getBundle().getString("WPReq") + projectID));
+            } else if (projectWP.containsKey(projectID)) {
                 ArrayList<String> wpList = projectWP.get(projectID);
                 if (wpList.contains(wp)) {
-                    throw new ValidatorException( new FacesMessage(FacesMessage.SEVERITY_ERROR, "", bundle.getString("uniqueWPAndProjectID")));
+                    throw new ValidatorException(
+                            new FacesMessage(FacesMessage.SEVERITY_ERROR, "",
+                                getBundle().getString("uniqueWPAndProjectID")));
                 } else {
                     wpList.add(wp);
                 }
@@ -226,9 +253,28 @@ public class TimesheetDetails implements TimesheetCollection {
             return;
         }
     }
-    
-    public void validateFraction(FacesContext context, UIComponent component, Object value) {
-        if(value == null) {
+
+    /**
+     * Returns the resource bundle based on Locale. 
+     * @return resource bundle
+     */
+    private ResourceBundle getBundle() {
+      FacesContext facescontext = FacesContext.getCurrentInstance();
+      Locale locale = facescontext.getViewRoot().getLocale();
+      ResourceBundle bundle = ResourceBundle.
+              getBundle("com.corejsf.timesheet.messages", locale);
+      return bundle;
+    }
+
+    /**
+     * Validates whether hours has more than one fraction digits.
+     * @param context 
+     * @param component 
+     * @param value 
+     */
+    public void validateFraction(FacesContext context,
+                UIComponent component, Object value) {
+        if (value == null) {
             return;
         } else {
             String hours = value.toString();
@@ -238,21 +284,28 @@ public class TimesheetDetails implements TimesheetCollection {
                 decimalPlaces = hours.length() - integerPlaces - 1;
             }
             if (decimalPlaces > 1) {
-                throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Hours must have only one fraction part."));
+                FacesContext facescontext = FacesContext.getCurrentInstance();
+                Locale locale = facescontext.getViewRoot().getLocale();
+                ResourceBundle bundle = ResourceBundle.
+                        getBundle("com.corejsf.timesheet.messages", locale);
+                throw new ValidatorException(
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                "", bundle.getString("hoursError")));
             }
         }
     }
    
-    
+    /**
+     * Saves the timesheet row into the database.
+     * @return Navigation string
+     */
     public String save() {
-        Employee currentUser = emp.getCurrentEmployee();
-        Timesheet ts = getCurrentTimesheet(currentUser);
+        Employee loggedInUser = emp.getCurrentEmployee();
+        Timesheet ts = getCurrentTimesheet(loggedInUser);
         
         for (TimesheetRow tr: ts.getDetails()) {
             rowManager.merge(tr);
         }
-        
         return "currentTimeSheet?faces-redirect=true";
     }
-    
 }

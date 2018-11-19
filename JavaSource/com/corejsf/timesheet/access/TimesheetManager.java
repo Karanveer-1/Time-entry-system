@@ -19,21 +19,30 @@ import ca.bcit.infosys.employee.Employee;
 import ca.bcit.infosys.timesheet.Timesheet;
 import ca.bcit.infosys.timesheet.TimesheetRow;
 
+/**
+ * Handle CRUD actions for Timesheet class.
+ * 
+ * @author Karanveer Khanna
+ * @version 1.0
+ * 
+ */
 @ConversationScoped
 public class TimesheetManager implements Serializable {
     private static final long serialVersionUID = 1L;
-    
-    @Inject TimesheetRowManager rowManager;
-    @Inject EmployeeManager employeeManager;
-    
+    /** dataSource for connection pool on JBoss AS 7 or higher. */
     @Resource(mappedName = "java:jboss/datasources/tes")
     private DataSource ds;
+    /** Holds the reference for Timesheet Row Manager class. */
+    @Inject private TimesheetRowManager rowManager;
+    /** Holds the reference for Employee Manager class. */
+    @Inject private EmployeeManager employeeManager;
 
-    public Timesheet find(int id) {
-        //read
-        return null;
-    }
-
+    /**
+     * Persist Timesheet into database. id must be unique.
+     * 
+     * @param newSheet the record to be persisted.
+     * @return boolean, true if successful else false
+     */
     public boolean persist(Timesheet newSheet) {
         Connection connection = null;
         PreparedStatement stmt = null;
@@ -41,7 +50,8 @@ public class TimesheetManager implements Serializable {
             try {
                 connection = ds.getConnection();
                 try {
-                    stmt = connection.prepareStatement("INSERT INTO TIMESHEET VALUES (?, ?)");
+                    stmt = connection.prepareStatement(
+                            "INSERT INTO TIMESHEET VALUES (?, ?)");
                     stmt.setInt(1, newSheet.getEmployee().getEmpNumber());
                     stmt.setDate(2, new Date(newSheet.getEndWeek().getTime()));
                     stmt.executeUpdate();
@@ -63,10 +73,11 @@ public class TimesheetManager implements Serializable {
         return true;
     }
 
-    public void merge(Timesheet emp) {
-        //update
-    }
-
+    /**
+     * Return Timesheet table as a list of Timesheet.
+     * 
+     * @return List of all records in Timesheet table and TimesheetRow Table
+     */
     public List<Timesheet> getAll() {
         Connection connection = null;
         Statement stmt = null;
@@ -76,11 +87,16 @@ public class TimesheetManager implements Serializable {
                 connection = ds.getConnection();
                 try {
                     stmt = connection.createStatement();
-                    ResultSet result = stmt.executeQuery("SELECT * FROM TIMESHEET");
+                    ResultSet result = stmt.executeQuery(
+                            "SELECT * FROM TIMESHEET");
                     while (result.next()) {
-                        Employee emp = employeeManager.find(result.getInt("EMPLOYEE_ID"));
-                        List<TimesheetRow> rows = rowManager.find(result.getInt("EMPLOYEE_ID"), result.getDate("END_WEEK"));
-                        list.add(new Timesheet(emp, result.getDate("END_WEEK"), rows));
+                        Employee emp = employeeManager.
+                                find(result.getInt("EMPLOYEE_ID"));
+                        List<TimesheetRow> rows = rowManager.
+                                find(result.getInt("EMPLOYEE_ID"),
+                                        result.getDate("END_WEEK"));
+                        list.add(new Timesheet(emp, result.getDate("END_WEEK"),
+                                rows));
                     }
                 } finally {
                     if (stmt != null) {
@@ -102,11 +118,3 @@ public class TimesheetManager implements Serializable {
     }
 
 }
-
-
-
-
-
-
-
-
